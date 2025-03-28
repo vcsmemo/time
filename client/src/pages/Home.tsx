@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TimeNavigation from "@/components/TimeNavigation";
-import WorldMap from "@/components/WorldMap";
+
 import LocationList from "@/components/LocationList";
 import TimeComparison from "@/components/TimeComparison";
 import AddLocationDialog from "@/components/AddLocationDialog";
 import { Location, defaultLocations } from "@/lib/locations";
 import { TimeData, getCurrentTimeData, getTimeData, convertTimeToAllLocations } from "@/lib/time";
-import { Map as MapIcon } from "lucide-react";
+
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -123,26 +123,8 @@ export default function Home() {
           selectedDateTime={selectedDateTime}
         />
 
-        {/* Main Content Area with Map and Times */}
-        <div className="main-container flex flex-col md:flex-row gap-6">
-          <div className="flex-1 flex flex-col gap-4">
-            {/* World Map Section */}
-            <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center">
-                <MapIcon size={18} className="mr-2 text-primary" />
-                <h3 className="text-lg font-medium">World Map</h3>
-              </div>
-              
-              <div className="p-4 h-[500px]">
-                <WorldMap 
-                  locations={locations}
-                  selectedLocationId={selectedLocationId}
-                  onLocationSelect={handleLocationSelect}
-                />
-              </div>
-            </div>
-          </div>
-          
+        {/* Main Content Area with Location List */}
+        <div className="main-container grid grid-cols-1 md:grid-cols-2 gap-6">
           <LocationList 
             locations={locations}
             timeData={timeData}

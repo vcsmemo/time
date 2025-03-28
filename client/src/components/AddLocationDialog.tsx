@@ -140,7 +140,6 @@ export default function AddLocationDialog({
                     <SelectValue placeholder="All Regions" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Regions</SelectItem>
                     {regions.map(region => (
                       <SelectItem key={region} value={region}>{region}</SelectItem>
                     ))}
@@ -160,7 +159,6 @@ export default function AddLocationDialog({
                     <SelectValue placeholder="All Countries" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Countries</SelectItem>
                     {countries.map(country => (
                       <SelectItem key={country} value={country}>{country}</SelectItem>
                     ))}
@@ -220,7 +218,6 @@ export default function AddLocationDialog({
                       <SelectValue placeholder="All Countries" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Countries</SelectItem>
                       {countries
                         .filter(country => {
                           // Only show countries in the selected region
