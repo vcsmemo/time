@@ -40,16 +40,21 @@ export default function Home() {
     // Convert the selected time to all location times
     const allTimeData = convertTimeToAllLocations(selectedDateTime, locations);
     setTimeData(allTimeData);
+  }, [selectedDateTime, locations]);
+  
+  // Update document title when selected location or time data changes
+  useEffect(() => {
+    if (!selectedLocationId || !timeData.size) return;
     
     // Update document title with current selected location
     const selectedLocation = locations.find(loc => loc.id === selectedLocationId);
     if (selectedLocation) {
-      const locationTime = timeData.get(selectedLocationId || '');
+      const locationTime = timeData.get(selectedLocationId);
       if (locationTime) {
         document.title = `${locationTime.time} - ${selectedLocation.name} | World Clock`;
       }
     }
-  }, [selectedDateTime, locations, selectedLocationId, timeData]);
+  }, [selectedLocationId, timeData, locations]);
   
   // Toggle dark mode
   const handleToggleTheme = () => {

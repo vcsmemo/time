@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Location } from "@/lib/locations";
-import { TimeData, getTimeDifference } from "@/lib/time";
+import { TimeData, getTimeDifference, getDetailedTimeDifference } from "@/lib/time";
 import { Button } from "@/components/ui/button";
 import { 
   Clock, Globe, MapPin, Plus, Search, X, 
@@ -187,6 +187,11 @@ export default function LocationList({
                 // Calculate time difference if selected location exists
                 const timeDiff = selectedLocation ? 
                   getTimeDifference(selectedLocation, location) : '';
+                
+                // Calculate detailed time difference with day information
+                const detailedDiff = selectedLocation ? 
+                  getDetailedTimeDifference(selectedLocation, location, new Date()) : null;
+                
                 const isAhead = timeDiff.startsWith('+');
                 
                 return (
@@ -241,7 +246,21 @@ export default function LocationList({
                       
                       <div className="flex-shrink-0 ml-2 text-right">
                         <div className="font-medium tabular-nums">{locationTimeData.time}</div>
-                        <div className="text-xs text-neutral-500">{locationTimeData.date.split(',')[0]}</div>
+                        <div className="flex items-center text-xs text-neutral-500 justify-end">
+                          <span>{locationTimeData.date.split(',')[0]}</span>
+                          
+                          {/* Day difference indicators */}
+                          {detailedDiff?.isNextDay && (
+                            <span className="ml-1 px-1 py-0.5 text-[9px] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-sm flex items-center">
+                              +1
+                            </span>
+                          )}
+                          {detailedDiff?.isPrevDay && (
+                            <span className="ml-1 px-1 py-0.5 text-[9px] bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-sm flex items-center">
+                              -1
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

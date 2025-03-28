@@ -1,6 +1,6 @@
 import { Location } from "@/lib/locations";
-import { TimeData, getTimeDifference } from "@/lib/time";
-import { BarChart4, Clock } from "lucide-react";
+import { TimeData, getTimeDifference, getDetailedTimeDifference } from "@/lib/time";
+import { BarChart4, Clock, ArrowUp, ArrowDown, CalendarDays } from "lucide-react";
 
 interface TimeComparisonProps {
   locations: Location[];
@@ -46,9 +46,18 @@ export default function TimeComparison({
               if (!locationTimeData) return null;
               
               const isSelected = location.id === selectedLocationId;
-              const difference = selectedLocation && !isSelected 
+              const simpleDifference = selectedLocation && !isSelected 
                 ? getTimeDifference(selectedLocation, location) 
                 : isSelected ? "Selected" : "-";
+              
+              // Calculate detailed time difference if we have a selected location
+              const detailedDiff = selectedLocation && !isSelected && selectedLocationId
+                ? getDetailedTimeDifference(
+                    selectedLocation, 
+                    location, 
+                    new Date() // Use current date as reference
+                  )
+                : null;
               
               return (
                 <tr 
@@ -68,7 +77,23 @@ export default function TimeComparison({
                     <div className="font-medium">{locationTimeData.time}</div>
                   </td>
                   <td className="p-3 text-neutral-700 dark:text-neutral-300">
-                    {locationTimeData.date.split(',')[0]}
+                    <div className="flex items-center">
+                      <span>{locationTimeData.date.split(',')[0]}</span>
+                      
+                      {/* Day difference indicators */}
+                      {detailedDiff?.isNextDay && (
+                        <div className="ml-2 px-1.5 py-0.5 text-[10px] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-sm flex items-center">
+                          <ArrowUp className="h-2.5 w-2.5 mr-0.5" />
+                          +1 day
+                        </div>
+                      )}
+                      {detailedDiff?.isPrevDay && (
+                        <div className="ml-2 px-1.5 py-0.5 text-[10px] bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-sm flex items-center">
+                          <ArrowDown className="h-2.5 w-2.5 mr-0.5" />
+                          -1 day
+                        </div>
+                      )}
+                    </div>
                     <div className="text-xs text-neutral-500">{locationTimeData.date.split(',')[1]}</div>
                   </td>
                   <td className="p-3">
@@ -79,9 +104,9 @@ export default function TimeComparison({
                   <td className={`p-3 ${
                     isSelected 
                       ? 'font-medium' 
-                      : difference.startsWith('+') 
+                      : detailedDiff?.hours.startsWith('+') 
                         ? 'text-emerald-600 dark:text-emerald-400' 
-                        : difference.startsWith('-') 
+                        : detailedDiff?.hours.startsWith('-') 
                           ? 'text-rose-600 dark:text-rose-400' 
                           : ''
                   }`}>
@@ -90,7 +115,14 @@ export default function TimeComparison({
                         Reference
                       </div>
                     ) : (
-                      difference
+                      <div className="flex items-center">
+                        {detailedDiff ? detailedDiff.hours : simpleDifference}
+                        
+                        {/* If there's a day difference, show a calendar icon */}
+                        {(detailedDiff?.isNextDay || detailedDiff?.isPrevDay) && (
+                          <CalendarDays className="h-3 w-3 ml-1 text-neutral-500" />
+                        )}
+                      </div>
                     )}
                   </td>
                 </tr>
@@ -100,9 +132,23 @@ export default function TimeComparison({
         </table>
       </div>
       
-      <div className="p-3 text-xs text-neutral-500 border-t border-neutral-200 dark:border-neutral-700">
-        <span className="text-emerald-600 dark:text-emerald-400">+</span> means ahead of selected location, 
-        <span className="ml-2 text-rose-600 dark:text-rose-400">-</span> means behind selected location
+      <div className="p-3 text-xs text-neutral-500 border-t border-neutral-200 dark:border-neutral-700 flex flex-wrap gap-x-4 gap-y-1">
+        <div>
+          <span className="text-emerald-600 dark:text-emerald-400">+</span> means ahead of selected location, 
+          <span className="ml-1 text-rose-600 dark:text-rose-400">-</span> means behind
+        </div>
+        <div>
+          <span className="inline-flex items-center bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-[10px] px-1 py-0.5 rounded-sm mr-1">
+            <ArrowUp className="h-2.5 w-2.5 mr-0.5" />+1
+          </span> 
+          means next day
+        </div>
+        <div>
+          <span className="inline-flex items-center bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-[10px] px-1 py-0.5 rounded-sm mr-1">
+            <ArrowDown className="h-2.5 w-2.5 mr-0.5" />-1
+          </span> 
+          means previous day
+        </div>
       </div>
     </div>
   );
