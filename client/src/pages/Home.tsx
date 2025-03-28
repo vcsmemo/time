@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TimeNavigation from "@/components/TimeNavigation";
-
 import LocationList from "@/components/LocationList";
 import TimeComparison from "@/components/TimeComparison";
 import AddLocationDialog from "@/components/AddLocationDialog";
 import { Location, defaultLocations } from "@/lib/locations";
-import { TimeData, getCurrentTimeData, getTimeData, convertTimeToAllLocations } from "@/lib/time";
-
+import { TimeData, convertTimeToAllLocations } from "@/lib/time";
+import { Clock, CalendarClock } from "lucide-react";
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -86,61 +85,97 @@ export default function Home() {
   const existingLocationIds = new Set(locations.map(loc => loc.id));
   
   return (
-    <div className={`flex flex-col min-h-screen ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-900 ${isDarkMode ? 'dark' : ''}`}>
       <Header 
         onToggleTheme={handleToggleTheme} 
         isDarkMode={isDarkMode}
         onToggleSettings={handleToggleSettings}
       />
       
-      <main className="flex-grow container mx-auto p-4">
-        {/* Current Time Display */}
-        <div className="mb-6 p-4 bg-white dark:bg-card rounded-lg shadow-md">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">Current Time</h2>
-            <div className="time-display text-3xl font-medium" id="current-time">
-              {selectedDateTime.toLocaleTimeString()}
+      <main className="flex-grow container mx-auto px-4 py-6">
+        {/* Two-column layout for main content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left column - Current time and settings */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Current Time Display */}
+            <div className="bg-white dark:bg-card rounded-lg shadow-sm overflow-hidden">
+              <div className="border-b border-neutral-200 dark:border-neutral-700 p-4 flex items-center">
+                <Clock className="h-5 w-5 text-primary mr-2" />
+                <h2 className="text-lg font-medium">Current Time</h2>
+              </div>
+              
+              <div className="p-4">
+                <div className="mb-4">
+                  <div className="text-4xl font-bold text-center bg-gradient-to-r from-primary to-primary/80 text-transparent bg-clip-text">
+                    {selectedDateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                  </div>
+                  <div className="text-center text-sm mt-1 text-neutral-500">
+                    {selectedDateTime.toLocaleDateString(undefined, { 
+                      weekday: 'long', 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </div>
+                </div>
+                
+                <div className="flex justify-center">
+                  <div className="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium">
+                    {Intl.DateTimeFormat().resolvedOptions().timeZone.replace('_', ' ')}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Time Navigation Tools */}
+            <div className="bg-white dark:bg-card rounded-lg shadow-sm overflow-hidden">
+              <div className="border-b border-neutral-200 dark:border-neutral-700 p-4 flex items-center">
+                <CalendarClock className="h-5 w-5 text-primary mr-2" />
+                <h2 className="text-lg font-medium">Adjust Time</h2>
+              </div>
+              <div className="p-4">
+                <TimeNavigation 
+                  onDateTimeChange={handleDateTimeChange}
+                  selectedDateTime={selectedDateTime}
+                />
+              </div>
+            </div>
+            
+            {/* Location List */}
+            <div className="lg:hidden">
+              <LocationList 
+                locations={locations}
+                timeData={timeData}
+                selectedLocationId={selectedLocationId}
+                onLocationSelect={handleLocationSelect}
+                onLocationRemove={handleLocationRemove}
+                onAddLocationClick={() => setIsAddLocationOpen(true)}
+              />
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="bg-neutral-100 dark:bg-neutral-800 px-3 py-1 rounded-full text-sm">
-              {selectedDateTime.toLocaleDateString(undefined, { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
-            </span>
-            <span className="bg-primary text-white px-3 py-1 rounded-full text-sm">
-              {Intl.DateTimeFormat().resolvedOptions().timeZone}
-            </span>
+          
+          {/* Right column - Location list and time comparison */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Location List (visible only on desktop) */}
+            <div className="hidden lg:block">
+              <LocationList 
+                locations={locations}
+                timeData={timeData}
+                selectedLocationId={selectedLocationId}
+                onLocationSelect={handleLocationSelect}
+                onLocationRemove={handleLocationRemove}
+                onAddLocationClick={() => setIsAddLocationOpen(true)}
+              />
+            </div>
+            
+            {/* Time Comparison Section */}
+            <TimeComparison 
+              locations={locations}
+              timeData={timeData}
+              selectedLocationId={selectedLocationId}
+            />
           </div>
         </div>
-
-        {/* Time Navigation Tools */}
-        <TimeNavigation 
-          onDateTimeChange={handleDateTimeChange}
-          selectedDateTime={selectedDateTime}
-        />
-
-        {/* Main Content Area with Location List */}
-        <div className="main-container grid grid-cols-1 md:grid-cols-2 gap-6">
-          <LocationList 
-            locations={locations}
-            timeData={timeData}
-            selectedLocationId={selectedLocationId}
-            onLocationSelect={handleLocationSelect}
-            onLocationRemove={handleLocationRemove}
-            onAddLocationClick={() => setIsAddLocationOpen(true)}
-          />
-        </div>
-        
-        {/* Time Comparison Section */}
-        <TimeComparison 
-          locations={locations}
-          timeData={timeData}
-          selectedLocationId={selectedLocationId}
-        />
       </main>
       
       <Footer />

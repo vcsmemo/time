@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { formatDateForInput, formatTimeForInput } from "@/lib/utils";
+import { Clock, RotateCcw } from "lucide-react";
 
 interface TimeNavigationProps {
   onDateTimeChange: (date: Date) => void;
@@ -41,40 +42,45 @@ export default function TimeNavigation({ onDateTimeChange, selectedDateTime }: T
   };
 
   return (
-    <div className="bg-white dark:bg-card rounded-lg shadow-md p-4 mb-6">
-      <h2 className="text-lg font-medium mb-3">Time Navigation</h2>
-      <div className="flex flex-wrap gap-4">
-        <div className="flex-1 min-w-[250px]">
-          <label className="block text-sm text-neutral-600 dark:text-neutral-300 mb-1">
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
             Select Date
           </label>
-          <input
-            type="date"
-            className="w-full p-2 border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800 dark:text-white"
-            value={dateValue}
-            onChange={handleDateChange}
-          />
+          <div className="relative">
+            <input
+              type="date"
+              className="w-full p-2 border border-neutral-200 dark:border-neutral-700 rounded-md bg-white dark:bg-neutral-800 dark:text-white"
+              value={dateValue}
+              onChange={handleDateChange}
+            />
+          </div>
         </div>
-        <div className="flex-1 min-w-[250px]">
-          <label className="block text-sm text-neutral-600 dark:text-neutral-300 mb-1">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
             Select Time
           </label>
-          <input
-            type="time"
-            className="w-full p-2 border border-neutral-200 dark:border-neutral-700 rounded bg-white dark:bg-neutral-800 dark:text-white"
-            value={timeValue}
-            onChange={handleTimeChange}
-          />
-        </div>
-        <div className="flex items-end">
-          <Button 
-            className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded"
-            onClick={handleResetToCurrent}
-          >
-            Current Time
-          </Button>
+          <div className="relative">
+            <input
+              type="time"
+              className="w-full p-2 border border-neutral-200 dark:border-neutral-700 rounded-md bg-white dark:bg-neutral-800 dark:text-white"
+              value={timeValue}
+              onChange={handleTimeChange}
+            />
+          </div>
         </div>
       </div>
+      
+      <Button 
+        variant="outline"
+        size="sm"
+        onClick={handleResetToCurrent}
+        className="w-full flex items-center justify-center gap-1.5"
+      >
+        <RotateCcw className="h-3.5 w-3.5" />
+        <span>Reset to Current Time</span>
+      </Button>
     </div>
   );
 }
