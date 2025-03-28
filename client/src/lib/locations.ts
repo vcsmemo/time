@@ -12,40 +12,13 @@ export interface Location {
 
 // Built-in major cities and their locations
 export const defaultLocations: Location[] = [
-  {
-    id: 'london',
-    name: 'London',
-    country: 'United Kingdom',
-    timezone: 'Europe/London',
-    coordinates: { x: 200, y: 180 }
-  },
+  // North America
   {
     id: 'newyork',
     name: 'New York',
     country: 'United States',
     timezone: 'America/New_York',
     coordinates: { x: 180, y: 230 }
-  },
-  {
-    id: 'tokyo',
-    name: 'Tokyo',
-    country: 'Japan',
-    timezone: 'Asia/Tokyo',
-    coordinates: { x: 650, y: 220 }
-  },
-  {
-    id: 'paris',
-    name: 'Paris',
-    country: 'France',
-    timezone: 'Europe/Paris',
-    coordinates: { x: 300, y: 200 }
-  },
-  {
-    id: 'sydney',
-    name: 'Sydney',
-    country: 'Australia',
-    timezone: 'Australia/Sydney',
-    coordinates: { x: 500, y: 300 }
   },
   {
     id: 'losangeles',
@@ -55,18 +28,106 @@ export const defaultLocations: Location[] = [
     coordinates: { x: 120, y: 220 }
   },
   {
-    id: 'dubai',
-    name: 'Dubai',
-    country: 'United Arab Emirates',
-    timezone: 'Asia/Dubai',
-    coordinates: { x: 380, y: 240 }
+    id: 'chicago',
+    name: 'Chicago',
+    country: 'United States',
+    timezone: 'America/Chicago',
+    coordinates: { x: 160, y: 220 }
   },
   {
-    id: 'singapore',
-    name: 'Singapore',
-    country: 'Singapore',
-    timezone: 'Asia/Singapore',
-    coordinates: { x: 520, y: 260 }
+    id: 'toronto',
+    name: 'Toronto',
+    country: 'Canada',
+    timezone: 'America/Toronto',
+    coordinates: { x: 175, y: 210 }
+  },
+  {
+    id: 'vancouver',
+    name: 'Vancouver',
+    country: 'Canada',
+    timezone: 'America/Vancouver',
+    coordinates: { x: 130, y: 210 }
+  },
+  {
+    id: 'mexicocity',
+    name: 'Mexico City',
+    country: 'Mexico',
+    timezone: 'America/Mexico_City',
+    coordinates: { x: 150, y: 250 }
+  },
+
+  // South America
+  {
+    id: 'riodejaneiro',
+    name: 'Rio de Janeiro',
+    country: 'Brazil',
+    timezone: 'America/Sao_Paulo',
+    coordinates: { x: 250, y: 290 }
+  },
+  {
+    id: 'buenosaires',
+    name: 'Buenos Aires',
+    country: 'Argentina',
+    timezone: 'America/Argentina/Buenos_Aires',
+    coordinates: { x: 240, y: 310 }
+  },
+  {
+    id: 'santiago',
+    name: 'Santiago',
+    country: 'Chile',
+    timezone: 'America/Santiago',
+    coordinates: { x: 230, y: 320 }
+  },
+  {
+    id: 'bogota',
+    name: 'Bogotá',
+    country: 'Colombia',
+    timezone: 'America/Bogota',
+    coordinates: { x: 220, y: 260 }
+  },
+  {
+    id: 'lima',
+    name: 'Lima',
+    country: 'Peru',
+    timezone: 'America/Lima',
+    coordinates: { x: 215, y: 275 }
+  },
+
+  // Europe
+  {
+    id: 'london',
+    name: 'London',
+    country: 'United Kingdom',
+    timezone: 'Europe/London',
+    coordinates: { x: 280, y: 180 }
+  },
+  {
+    id: 'paris',
+    name: 'Paris',
+    country: 'France',
+    timezone: 'Europe/Paris',
+    coordinates: { x: 300, y: 200 }
+  },
+  {
+    id: 'berlin',
+    name: 'Berlin',
+    country: 'Germany',
+    timezone: 'Europe/Berlin',
+    coordinates: { x: 310, y: 190 }
+  },
+  {
+    id: 'rome',
+    name: 'Rome',
+    country: 'Italy',
+    timezone: 'Europe/Rome',
+    coordinates: { x: 320, y: 205 }
+  },
+  {
+    id: 'madrid',
+    name: 'Madrid',
+    country: 'Spain',
+    timezone: 'Europe/Madrid',
+    coordinates: { x: 290, y: 210 }
   },
   {
     id: 'moscow',
@@ -76,24 +137,269 @@ export const defaultLocations: Location[] = [
     coordinates: { x: 350, y: 175 }
   },
   {
-    id: 'riodejaneiro',
-    name: 'Rio de Janeiro',
-    country: 'Brazil',
-    timezone: 'America/Sao_Paulo',
-    coordinates: { x: 250, y: 290 }
+    id: 'amsterdam',
+    name: 'Amsterdam',
+    country: 'Netherlands',
+    timezone: 'Europe/Amsterdam',
+    coordinates: { x: 300, y: 185 }
+  },
+  {
+    id: 'zurich',
+    name: 'Zurich',
+    country: 'Switzerland',
+    timezone: 'Europe/Zurich',
+    coordinates: { x: 305, y: 195 }
+  },
+  {
+    id: 'lisbon',
+    name: 'Lisbon',
+    country: 'Portugal',
+    timezone: 'Europe/Lisbon',
+    coordinates: { x: 280, y: 215 }
+  },
+  {
+    id: 'stockholm',
+    name: 'Stockholm',
+    country: 'Sweden',
+    timezone: 'Europe/Stockholm',
+    coordinates: { x: 320, y: 170 }
+  },
+  {
+    id: 'istanbul',
+    name: 'Istanbul',
+    country: 'Turkey',
+    timezone: 'Europe/Istanbul',
+    coordinates: { x: 340, y: 215 }
+  },
+
+  // Asia
+  {
+    id: 'tokyo',
+    name: 'Tokyo',
+    country: 'Japan',
+    timezone: 'Asia/Tokyo',
+    coordinates: { x: 650, y: 220 }
+  },
+  {
+    id: 'beijing',
+    name: 'Beijing',
+    country: 'China',
+    timezone: 'Asia/Shanghai',
+    coordinates: { x: 580, y: 220 }
+  },
+  {
+    id: 'shanghai',
+    name: 'Shanghai',
+    country: 'China',
+    timezone: 'Asia/Shanghai',
+    coordinates: { x: 600, y: 230 }
+  },
+  {
+    id: 'hongkong',
+    name: 'Hong Kong',
+    country: 'China',
+    timezone: 'Asia/Hong_Kong',
+    coordinates: { x: 590, y: 240 }
+  },
+  {
+    id: 'seoul',
+    name: 'Seoul',
+    country: 'South Korea',
+    timezone: 'Asia/Seoul',
+    coordinates: { x: 620, y: 215 }
+  },
+  {
+    id: 'singapore',
+    name: 'Singapore',
+    country: 'Singapore',
+    timezone: 'Asia/Singapore',
+    coordinates: { x: 520, y: 260 }
+  },
+  {
+    id: 'bangkok',
+    name: 'Bangkok',
+    country: 'Thailand',
+    timezone: 'Asia/Bangkok',
+    coordinates: { x: 540, y: 250 }
+  },
+  {
+    id: 'mumbai',
+    name: 'Mumbai',
+    country: 'India',
+    timezone: 'Asia/Kolkata',
+    coordinates: { x: 460, y: 250 }
+  },
+  {
+    id: 'delhi',
+    name: 'New Delhi',
+    country: 'India',
+    timezone: 'Asia/Kolkata',
+    coordinates: { x: 470, y: 240 }
+  },
+  {
+    id: 'dubai',
+    name: 'Dubai',
+    country: 'United Arab Emirates',
+    timezone: 'Asia/Dubai',
+    coordinates: { x: 380, y: 240 }
+  },
+  {
+    id: 'taipei',
+    name: 'Taipei',
+    country: 'Taiwan',
+    timezone: 'Asia/Taipei',
+    coordinates: { x: 610, y: 235 }
+  },
+  {
+    id: 'kualalumpur',
+    name: 'Kuala Lumpur',
+    country: 'Malaysia',
+    timezone: 'Asia/Kuala_Lumpur',
+    coordinates: { x: 530, y: 255 }
+  },
+
+  // Oceania
+  {
+    id: 'sydney',
+    name: 'Sydney',
+    country: 'Australia',
+    timezone: 'Australia/Sydney',
+    coordinates: { x: 640, y: 300 }
+  },
+  {
+    id: 'melbourne',
+    name: 'Melbourne',
+    country: 'Australia',
+    timezone: 'Australia/Melbourne',
+    coordinates: { x: 630, y: 310 }
+  },
+  {
+    id: 'brisbane',
+    name: 'Brisbane',
+    country: 'Australia',
+    timezone: 'Australia/Brisbane',
+    coordinates: { x: 645, y: 290 }
+  },
+  {
+    id: 'auckland',
+    name: 'Auckland',
+    country: 'New Zealand',
+    timezone: 'Pacific/Auckland',
+    coordinates: { x: 670, y: 320 }
+  },
+  {
+    id: 'perth',
+    name: 'Perth',
+    country: 'Australia',
+    timezone: 'Australia/Perth',
+    coordinates: { x: 580, y: 300 }
+  },
+
+  // Africa
+  {
+    id: 'cairo',
+    name: 'Cairo',
+    country: 'Egypt',
+    timezone: 'Africa/Cairo',
+    coordinates: { x: 350, y: 230 }
+  },
+  {
+    id: 'johannesburg',
+    name: 'Johannesburg',
+    country: 'South Africa',
+    timezone: 'Africa/Johannesburg',
+    coordinates: { x: 330, y: 290 }
+  },
+  {
+    id: 'lagos',
+    name: 'Lagos',
+    country: 'Nigeria',
+    timezone: 'Africa/Lagos',
+    coordinates: { x: 300, y: 260 }
+  },
+  {
+    id: 'casablanca',
+    name: 'Casablanca',
+    country: 'Morocco',
+    timezone: 'Africa/Casablanca',
+    coordinates: { x: 280, y: 235 }
+  },
+  {
+    id: 'nairobi',
+    name: 'Nairobi',
+    country: 'Kenya',
+    timezone: 'Africa/Nairobi',
+    coordinates: { x: 340, y: 265 }
   }
 ];
 
-// Search for a location by name
-export function searchLocation(query: string): Location[] {
-  if (!query || query.length < 2) return [];
+// Helper function to get all continents/regions
+export function getRegions(): string[] {
+  return [
+    'North America',
+    'South America',
+    'Europe',
+    'Asia',
+    'Oceania',
+    'Africa'
+  ];
+}
+
+// Helper function to get all countries from the dataset
+export function getCountries(): string[] {
+  const countriesSet = new Set<string>();
+  defaultLocations.forEach(location => {
+    countriesSet.add(location.country);
+  });
+  return Array.from(countriesSet).sort();
+}
+
+// Search for a location by name, country, or region
+export function searchLocation(query: string, filters?: {
+  region?: string;
+  country?: string;
+}): Location[] {
+  // Require at least 2 characters for text search unless filters are provided
+  if (!query && !filters) return [];
+  if (!filters && (!query || query.length < 2)) return [];
   
-  const normalizedQuery = query.toLowerCase();
+  const normalizedQuery = query ? query.toLowerCase() : '';
   
-  return defaultLocations.filter(location => 
-    location.name.toLowerCase().includes(normalizedQuery) ||
-    location.country.toLowerCase().includes(normalizedQuery)
-  );
+  // Apply filters to locations
+  return defaultLocations.filter(location => {
+    // Text search
+    const matchesQuery = !normalizedQuery || 
+      location.name.toLowerCase().includes(normalizedQuery) ||
+      location.country.toLowerCase().includes(normalizedQuery) ||
+      location.timezone.toLowerCase().includes(normalizedQuery);
+    
+    // Region filter - based on location ordering in the array
+    // We've organized the array by regions with comments
+    const matchesRegion = !filters?.region || getLocationRegion(location) === filters.region;
+    
+    // Country filter
+    const matchesCountry = !filters?.country || location.country === filters.country;
+    
+    return matchesQuery && matchesRegion && matchesCountry;
+  });
+}
+
+// Helper function to determine a location's region based on our data organization
+function getLocationRegion(location: Location): string {
+  const id = location.id;
+  
+  // These ID mappings are based on how the locations are organized in the defaultLocations array
+  const locationIndex = defaultLocations.findIndex(loc => loc.id === id);
+  
+  if (locationIndex < 0) return 'Unknown';
+  
+  // Map index ranges to regions based on how data is organized
+  if (locationIndex < 6) return 'North America';
+  if (locationIndex < 11) return 'South America';
+  if (locationIndex < 22) return 'Europe';
+  if (locationIndex < 34) return 'Asia';
+  if (locationIndex < 39) return 'Oceania';
+  return 'Africa';
 }
 
 // List of all IANA timezones for advanced use
