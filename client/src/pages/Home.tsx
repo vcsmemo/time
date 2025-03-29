@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TimeNavigation from "@/components/TimeNavigation";
@@ -8,7 +9,7 @@ import TimeComparison from "@/components/TimeComparison";
 import AddLocationDialog from "@/components/AddLocationDialog";
 import { Location, defaultLocations } from "@/lib/locations";
 import { TimeData, convertTimeToAllLocations } from "@/lib/time";
-import { Clock, CalendarClock, Globe } from "lucide-react";
+import { Clock, CalendarClock, Globe, Flag, BookOpen, MapPin } from "lucide-react";
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 export default function Home() {
@@ -330,6 +331,11 @@ export default function Home() {
                       {' '}{selectedLocation.timezone} time zone. The current local time 
                       is {selectedLocationTime.time} on {selectedLocationTime.date}.
                     </p>
+                    <div className="mt-2">
+                      <Link href={`/city/${selectedLocation.country.toLowerCase().replace(/\s/g, '-')}/${selectedLocation.name.toLowerCase().replace(/\s/g, '-')}`} className="text-primary hover:underline">
+                        View detailed information about {selectedLocation.name}
+                      </Link>
+                    </div>
                   </div>
                 )}
                 
@@ -346,6 +352,38 @@ export default function Home() {
                   This tool helps you convert times between different time zones and plan 
                   international calls, meetings, and travel with accurate local time information.
                 </p>
+                
+                <div className="not-prose mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                  <h3 className="text-base font-medium mb-3">Explore More Time Resources</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Link href="/timezones">
+                      <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
+                        <Clock className="h-4 w-4 mr-2" />
+                        Browse All Time Zones
+                      </div>
+                    </Link>
+                    <Link href="/countries">
+                      <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
+                        <Flag className="h-4 w-4 mr-2" />
+                        View Countries & Their Time Zones
+                      </div>
+                    </Link>
+                    <Link href="/blog">
+                      <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Read Time Zone Articles
+                      </div>
+                    </Link>
+                    {selectedLocation && (
+                      <Link href={`/timezone/${selectedLocation.timezone.replace(/\//g, '-').toLowerCase()}`}>
+                        <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
+                          <MapPin className="h-4 w-4 mr-2" />
+                          Explore {selectedLocation.timezone.replace('_', ' ')}
+                        </div>
+                      </Link>
+                    )}
+                  </div>
+                </div>
               </section>
             </div>
           </div>
