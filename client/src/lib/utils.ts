@@ -65,3 +65,15 @@ export function parseDateTimeFromInputs(dateStr: string, timeStr: string): Date 
   
   return new Date(year, month - 1, day, hours, minutes);
 }
+
+// Convert timezone string to URL format (e.g., "America/New_York" to "america-new_york")
+export function timezoneToUrlFormat(timezone: string): string {
+  if (timezone.startsWith('UTC+')) {
+    return `utc-plus-${timezone.replace('UTC+', '')}`;
+  } else if (timezone.startsWith('UTC-')) {
+    return `utc-minus-${timezone.replace('UTC-', '')}`;
+  } else {
+    // Replace slashes with hyphens but preserve underscores, then lowercase
+    return timezone.replace(/\//g, '-').toLowerCase();
+  }
+}

@@ -24,16 +24,37 @@ export default function TimeZonePage() {
   
   // Decode the timezone from URL format to actual timezone (e.g., "UTC+8" from "utc-plus-8")
   const getTimezoneFromParam = (param: string): string => {
+    // Safety check for null or undefined
+    if (!param) return '';
+    
     // Convert from URL format to display format
-    if (param?.startsWith('utc-plus-')) {
+    if (param.startsWith('utc-plus-')) {
       const offset = param.replace('utc-plus-', '');
       return `UTC+${offset}`;
-    } else if (param?.startsWith('utc-minus-')) {
+    } else if (param.startsWith('utc-minus-')) {
       const offset = param.replace('utc-minus-', '');
       return `UTC-${offset}`;
     }
-    // Handle special cases or return as is for named timezones
-    return param?.replace(/-/g, '/').replace(/_/g, ' ') || '';
+    
+    // Handle named timezones (e.g., america/los-angeles → America/Los_Angeles)
+    let timezone = param;
+    
+    // Replace hyphens with slashes
+    timezone = timezone.replace(/-/g, '/');
+    
+    // Process each segment to capitalize first letter and handle underscores
+    const segments = timezone.split('/');
+    timezone = segments.map(segment => {
+      // Convert segment to title case and replace underscores
+      if (segment.includes('_')) {
+        return segment.split('_')
+          .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+          .join('_');
+      }
+      return segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase();
+    }).join('/');
+    
+    return timezone;
   };
   
   const decodedTimezone = timezone ? getTimezoneFromParam(timezone) : '';

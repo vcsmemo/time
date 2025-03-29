@@ -9,6 +9,7 @@ import TimeComparison from "@/components/TimeComparison";
 import AddLocationDialog from "@/components/AddLocationDialog";
 import { Location, defaultLocations } from "@/lib/locations";
 import { TimeData, convertTimeToAllLocations } from "@/lib/time";
+import { timezoneToUrlFormat } from "@/lib/utils";
 import { Clock, CalendarClock, Globe, Flag, BookOpen, MapPin } from "lucide-react";
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
@@ -375,10 +376,10 @@ export default function Home() {
                       </div>
                     </Link>
                     {selectedLocation && (
-                      <Link href={`/timezone/${selectedLocation.timezone.replace(/\//g, '-').toLowerCase()}`}>
+                      <Link href={`/timezone/${timezoneToUrlFormat(selectedLocation.timezone)}`}>
                         <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
                           <MapPin className="h-4 w-4 mr-2" />
-                          Explore {selectedLocation.timezone.replace('_', ' ')}
+                          Explore {selectedLocation.timezone.replace(/_/g, ' ')}
                         </div>
                       </Link>
                     )}
