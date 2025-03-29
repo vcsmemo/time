@@ -239,27 +239,7 @@ export default function BlogPage() {
           </div>
         )}
         
-        {/* Newsletter Signup */}
-        <section className="bg-primary/5 dark:bg-primary/10 rounded-lg p-8 mb-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-bold mb-3">Stay Updated on Time Zone News</h2>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-              Subscribe to our newsletter to receive updates on daylight saving time changes, 
-              time zone adjustments, and new articles about global time coordination.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input 
-                type="email" 
-                placeholder="Your email address" 
-                className="rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 flex-grow"
-              />
-              <Button>Subscribe</Button>
-            </div>
-            <p className="text-xs text-neutral-500 mt-3">
-              We respect your privacy. Unsubscribe at any time.
-            </p>
-          </div>
-        </section>
+
         
         {/* Blog Information */}
         <section className="bg-white dark:bg-card rounded-lg shadow-sm p-6 prose prose-sm dark:prose-invert max-w-none">
