@@ -466,23 +466,7 @@ export default function BlogArticlePage() {
             </section>
           )}
           
-          {/* Newsletter Signup */}
-          <section className="bg-primary/5 dark:bg-primary/10 rounded-lg p-6 mb-8">
-            <div className="text-center">
-              <h2 className="text-xl font-bold mb-2">Enjoyed this article?</h2>
-              <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-                Subscribe to our newsletter for more time zone insights and updates.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input 
-                  type="email" 
-                  placeholder="Your email address" 
-                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 flex-grow"
-                />
-                <Button>Subscribe</Button>
-              </div>
-            </div>
-          </section>
+
         </article>
       </main>
       
