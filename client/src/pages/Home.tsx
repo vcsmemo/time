@@ -84,7 +84,7 @@ export default function Home() {
   
   // Handle date/time change
   const handleDateTimeChange = (date: Date) => {
-    // 如果用户手动调整了时间，关闭实时更新
+    // If user manually adjusts time, turn off live updates
     if (useRealTime) {
       setUseRealTime(false);
     }
@@ -238,8 +238,8 @@ export default function Home() {
                   useRealTime={useRealTime}
                   onToggleRealTime={(value) => {
                     setUseRealTime(value);
-                    // 如果用户关闭了实时更新，停留在当前时间
-                    // 如果用户开启了实时更新，重置到当前时间
+                    // If user turns off live updates, stay at current time
+                    // If user turns on live updates, reset to current time
                     if (value) {
                       setSelectedDateTime(new Date());
                     }

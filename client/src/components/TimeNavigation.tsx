@@ -83,7 +83,7 @@ export default function TimeNavigation({
       <div className="flex items-center justify-between px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 rounded-md">
         <div className="flex items-center">
           <Clock className="h-4 w-4 text-primary mr-1.5" />
-          <span className="text-sm font-medium">实时更新</span>
+          <span className="text-sm font-medium">Live Update</span>
         </div>
         <div className="flex items-center">
           <Switch 
@@ -107,7 +107,7 @@ export default function TimeNavigation({
         disabled={useRealTime}
       >
         <RotateCcw className="h-3.5 w-3.5" />
-        <span>重置为当前时间</span>
+        <span>Reset to Current Time</span>
       </Button>
     </div>
   );
