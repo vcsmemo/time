@@ -12,7 +12,7 @@ import CountriesPage from "@/pages/CountriesPage";
 import CountryPage from "@/pages/CountryPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogArticlePage from "@/pages/BlogArticlePage";
-import { useState, useEffect } from "react";
+import { ThemeProvider } from "./lib/ThemeContext";
 
 function Router() {
   return (
@@ -32,29 +32,14 @@ function Router() {
 }
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  
-  useEffect(() => {
-    // Check for user preference or saved theme
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDarkMode(prefersDark);
-  }, []);
-
-  useEffect(() => {
-    // Apply the theme class to the document
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={`min-h-screen flex flex-col ${isDarkMode ? 'dark' : ''}`}>
-        <Router />
-        <Toaster />
-      </div>
+      <ThemeProvider>
+        <div className="min-h-screen flex flex-col">
+          <Router />
+          <Toaster />
+        </div>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

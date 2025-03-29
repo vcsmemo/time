@@ -192,7 +192,7 @@ export default function CountriesPage() {
                     
                     <div>
                       <div className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-1">Major Cities:</div>
-                      <p className="text-sm text-neutral-500 line-clamp-2">
+                      <p className="text-sm text-neutral-500 dark:text-neutral-300 line-clamp-2">
                         {country.locations.slice(0, 5).map(loc => loc.name).join(', ')}
                         {country.locations.length > 5 && `, +${country.locations.length - 5} more`}
                       </p>
@@ -245,7 +245,7 @@ export default function CountriesPage() {
             countries with a 45-minute offset from UTC.
           </p>
           
-          <p className="text-sm text-neutral-500 mt-4">
+          <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
             Use this directory to explore time zones by country and better understand 
             global time differences for travel planning, business communications, and more.
           </p>

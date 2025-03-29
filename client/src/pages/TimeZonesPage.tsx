@@ -290,7 +290,7 @@ export default function TimeZonesPage() {
             Pacific islands span many time zones, sometimes with significant offsets.
           </p>
           
-          <p className="text-sm text-neutral-500 mt-4">
+          <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
             Use our directory to explore time zones around the world and better understand 
             global time differences for travel planning, business communications, and more.
           </p>

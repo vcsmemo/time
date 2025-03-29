@@ -159,7 +159,7 @@ export default function BlogPage() {
             <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 text-transparent bg-clip-text">
               Time Zone Blog
             </h1>
-            <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl">
+            <p className="text-neutral-600 dark:text-neutral-200 max-w-2xl">
               Learn about time zones, international travel, time differences, and more with our educational articles.
             </p>
           </header>
@@ -211,7 +211,7 @@ export default function BlogPage() {
                     {article.title}
                   </h2>
                   
-                  <p className="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-3 mb-4">
+                  <p className="text-neutral-600 dark:text-neutral-200 text-sm line-clamp-3 mb-4">
                     {article.excerpt}
                   </p>
                 </div>
@@ -230,7 +230,7 @@ export default function BlogPage() {
         {filteredArticles.length === 0 && (
           <div className="bg-white dark:bg-card rounded-lg shadow-sm p-8 text-center mb-8">
             <h2 className="text-xl font-semibold mb-2">No articles found</h2>
-            <p className="text-neutral-600 dark:text-neutral-400">
+            <p className="text-neutral-600 dark:text-neutral-200">
               No articles match the selected category. Try a different category or view all articles.
             </p>
             <Button variant="outline" className="mt-4" onClick={() => setActiveCategory(null)}>
@@ -263,7 +263,7 @@ export default function BlogPage() {
             <li>Business strategies for global teams working across time zones</li>
           </ul>
           
-          <p className="text-sm text-neutral-500 mt-4">
+          <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
             Have a suggestion for a blog topic or want to contribute? Contact us with your ideas.
           </p>
         </section>

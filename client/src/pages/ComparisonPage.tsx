@@ -284,7 +284,7 @@ export default function ComparisonPage() {
                   </time>
                   <time 
                     dateTime={fromTimeData.rawDate.toISOString()} 
-                    className="text-center text-sm mt-1 text-neutral-500 block"
+                    className="text-center text-sm mt-1 text-neutral-500 dark:text-neutral-300 block"
                   >
                     {fromTimeData.date}
                   </time>
@@ -317,7 +317,7 @@ export default function ComparisonPage() {
                   </time>
                   <time 
                     dateTime={toTimeData.rawDate.toISOString()} 
-                    className="text-center text-sm mt-1 text-neutral-500 block"
+                    className="text-center text-sm mt-1 text-neutral-500 dark:text-neutral-300 block"
                   >
                     {toTimeData.date}
                   </time>
@@ -474,7 +474,7 @@ export default function ComparisonPage() {
             Staying hydrated, getting natural sunlight exposure, and adjusting your sleep schedule gradually can help with time zone adaptation.
           </p>
           
-          <p className="text-sm text-neutral-500 mt-4">
+          <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
             Use this tool to convert times between {fromLocation.name} and {toLocation.name} to plan 
             international calls, meetings, and travel with accurate local time information.
           </p>

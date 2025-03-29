@@ -234,7 +234,7 @@ export default function CountryPage() {
                           {cityTime && (
                             <div>
                               <p className="text-2xl font-bold text-primary">{cityTime.time}</p>
-                              <p className="text-xs text-neutral-500">{cityTime.date}</p>
+                              <p className="text-xs text-neutral-500 dark:text-neutral-300">{cityTime.date}</p>
                             </div>
                           )}
                         </div>
@@ -279,7 +279,7 @@ export default function CountryPage() {
             </>
           )}
           
-          <p className="text-sm text-neutral-500 mt-4">
+          <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
             Use this directory to find current times in {countryName} cities and to plan travel, 
             business meetings, or calls across different regions of the country.
           </p>

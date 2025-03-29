@@ -382,11 +382,11 @@ export default function BlogArticlePage() {
             <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 text-transparent bg-clip-text">
               {article.title}
             </h1>
-            <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-4 max-w-3xl mx-auto">
+            <p className="text-xl text-neutral-600 dark:text-neutral-200 mb-4 max-w-3xl mx-auto">
               {article.excerpt}
             </p>
             
-            <div className="flex items-center justify-center gap-4 text-sm text-neutral-500">
+            <div className="flex items-center justify-center gap-4 text-sm text-neutral-500 dark:text-neutral-300">
               <span className="flex items-center">
                 <Calendar className="h-4 w-4 mr-1.5" />
                 {article.date}
@@ -427,7 +427,7 @@ export default function BlogArticlePage() {
                 </div>
                 
                 <div className="flex items-center text-sm">
-                  <span className="text-neutral-500 mr-2">Category:</span>
+                  <span className="text-neutral-500 dark:text-neutral-300 mr-2">Category:</span>
                   <Link href={`/blog?category=${article.category.toLowerCase()}`}>
                     <span className="text-primary hover:underline">{article.category}</span>
                   </Link>
@@ -445,7 +445,7 @@ export default function BlogArticlePage() {
                   <Link key={relatedArticle.id} href={`/blog/${relatedArticle.id}`}>
                     <div className="bg-white dark:bg-card rounded-lg shadow-sm overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow border border-transparent hover:border-primary/20">
                       <div className="p-4 flex-grow">
-                        <div className="text-xs text-neutral-500 mb-2">
+                        <div className="text-xs text-neutral-500 dark:text-neutral-300 mb-2">
                           <span className="inline-flex items-center bg-primary/10 text-primary px-2 py-1 rounded-full">
                             {relatedArticle.category}
                           </span>
@@ -455,7 +455,7 @@ export default function BlogArticlePage() {
                           {relatedArticle.title}
                         </h3>
                         
-                        <p className="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2">
+                        <p className="text-neutral-600 dark:text-neutral-200 text-sm line-clamp-2">
                           {relatedArticle.excerpt}
                         </p>
                       </div>

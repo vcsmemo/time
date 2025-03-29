@@ -240,7 +240,7 @@ export default function TimeZonePage() {
                         </time>
                         <time 
                           dateTime={cityTime.rawDate.toISOString()} 
-                          className="text-center text-sm mt-1 text-neutral-500 block"
+                          className="text-center text-sm mt-1 text-neutral-500 dark:text-neutral-300 block"
                         >
                           {cityTime.date}
                         </time>
@@ -289,7 +289,7 @@ export default function TimeZonePage() {
               <li>Approximate longitude: {decodedTimezone.includes('UTC+') ? `${Number(decodedTimezone.replace('UTC+', '')) * 15}°E` : decodedTimezone.includes('UTC-') ? `${Number(decodedTimezone.replace('UTC-', '')) * 15}°W` : 'Varies'}</li>
             </ul>
             
-            <p className="text-sm text-neutral-500 mt-4">
+            <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
               Use this tool to convert times between {decodedTimezone} and other time zones and plan 
               international calls, meetings, and travel with accurate local time information.
             </p>

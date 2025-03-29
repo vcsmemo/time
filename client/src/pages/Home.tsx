@@ -12,9 +12,10 @@ import { TimeData, convertTimeToAllLocations } from "@/lib/time";
 import { timezoneToUrlFormat } from "@/lib/utils";
 import { Clock, CalendarClock, Globe, Flag, BookOpen, MapPin } from "lucide-react";
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { useTheme } from "@/lib/ThemeContext";
 
 export default function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddLocationOpen, setIsAddLocationOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
@@ -77,7 +78,7 @@ export default function Home() {
   
   // Toggle dark mode
   const handleToggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
+    toggleDarkMode();
   };
   
   // Toggle settings panel
@@ -154,7 +155,7 @@ export default function Home() {
   
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className={`flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-900 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="flex flex-col min-h-screen bg-neutral-50 dark:bg-neutral-900">
         {/* SEO Meta Tags */}
         <Helmet>
           <title>{appTitle}</title>
@@ -232,7 +233,7 @@ export default function Home() {
                     </time>
                     <time 
                       dateTime={selectedDateTime.toISOString()} 
-                      className="text-center text-sm mt-1 text-neutral-500 block"
+                      className="text-center text-sm mt-1 text-neutral-500 dark:text-neutral-300 block"
                     >
                       {selectedDateTime.toLocaleDateString(undefined, { 
                         weekday: 'long', 
@@ -349,7 +350,7 @@ export default function Home() {
                   <li>Time zones can be written as UTC offsets (e.g., UTC+8, UTC-5)</li>
                 </ul>
                 
-                <p className="text-sm text-neutral-500 mt-4">
+                <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
                   This tool helps you convert times between different time zones and plan 
                   international calls, meetings, and travel with accurate local time information.
                 </p>

@@ -274,7 +274,7 @@ export default function CityPage() {
                       </time>
                       <time 
                         dateTime={cityTimeData.rawDate.toISOString()} 
-                        className="text-center text-sm mt-1 text-neutral-500 block"
+                        className="text-center text-sm mt-1 text-neutral-500 dark:text-neutral-300 block"
                       >
                         {cityTimeData.date}
                       </time>
@@ -354,7 +354,7 @@ export default function CityPage() {
               local business hours, typically 9:00 AM to 5:00 PM local time.
             </p>
             
-            <p className="text-sm text-neutral-500 mt-4">
+            <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
               Use this tool to convert times between {cityLocation.name} and other locations to plan 
               international calls, meetings, and travel with accurate local time information.
             </p>
