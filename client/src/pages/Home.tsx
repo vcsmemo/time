@@ -15,6 +15,7 @@ export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddLocationOpen, setIsAddLocationOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
+  const [useRealTime, setUseRealTime] = useState<boolean>(true); // 控制是否使用实时更新
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   const [locations, setLocations] = useState<Location[]>([]);
   const [timeData, setTimeData] = useState<Map<string, TimeData>>(new Map<string, TimeData>());
@@ -32,6 +33,21 @@ export default function Home() {
     // Set New York as the default selected location
     setSelectedLocationId(initialLocations[1].id);
   }, []);
+  
+  // 实时更新时间：每秒更新一次当前时间
+  useEffect(() => {
+    if (!useRealTime) return;
+    
+    // 设置定时器，实时更新时间
+    const timer = setInterval(() => {
+      setSelectedDateTime(new Date());
+    }, 1000);
+    
+    // 清理函数
+    return () => {
+      clearInterval(timer);
+    };
+  }, [useRealTime]);
   
   // Update times based on selected date/time
   useEffect(() => {
@@ -68,6 +84,10 @@ export default function Home() {
   
   // Handle date/time change
   const handleDateTimeChange = (date: Date) => {
+    // 如果用户手动调整了时间，关闭实时更新
+    if (useRealTime) {
+      setUseRealTime(false);
+    }
     setSelectedDateTime(date);
   };
   
@@ -215,6 +235,15 @@ export default function Home() {
                 <TimeNavigation 
                   onDateTimeChange={handleDateTimeChange}
                   selectedDateTime={selectedDateTime}
+                  useRealTime={useRealTime}
+                  onToggleRealTime={(value) => {
+                    setUseRealTime(value);
+                    // 如果用户关闭了实时更新，停留在当前时间
+                    // 如果用户开启了实时更新，重置到当前时间
+                    if (value) {
+                      setSelectedDateTime(new Date());
+                    }
+                  }}
                 />
               </div>
             </section>

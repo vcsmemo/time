@@ -1,14 +1,22 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { formatDateForInput, formatTimeForInput } from "@/lib/utils";
-import { Clock, RotateCcw } from "lucide-react";
+import { Clock, RotateCcw, Pause, Play } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 interface TimeNavigationProps {
   onDateTimeChange: (date: Date) => void;
   selectedDateTime: Date;
+  useRealTime?: boolean;
+  onToggleRealTime?: (useRealTime: boolean) => void;
 }
 
-export default function TimeNavigation({ onDateTimeChange, selectedDateTime }: TimeNavigationProps) {
+export default function TimeNavigation({ 
+  onDateTimeChange, 
+  selectedDateTime,
+  useRealTime = true,
+  onToggleRealTime = () => {}
+}: TimeNavigationProps) {
   const [dateValue, setDateValue] = useState<string>(formatDateForInput(selectedDateTime));
   const [timeValue, setTimeValue] = useState<string>(formatTimeForInput(selectedDateTime));
 
@@ -72,14 +80,34 @@ export default function TimeNavigation({ onDateTimeChange, selectedDateTime }: T
         </div>
       </div>
       
+      <div className="flex items-center justify-between px-2 py-1.5 bg-neutral-50 dark:bg-neutral-800 rounded-md">
+        <div className="flex items-center">
+          <Clock className="h-4 w-4 text-primary mr-1.5" />
+          <span className="text-sm font-medium">实时更新</span>
+        </div>
+        <div className="flex items-center">
+          <Switch 
+            checked={useRealTime} 
+            onCheckedChange={onToggleRealTime}
+            className="data-[state=checked]:bg-primary"
+          />
+          {useRealTime ? (
+            <Play className="h-3.5 w-3.5 ml-2 text-emerald-500" />
+          ) : (
+            <Pause className="h-3.5 w-3.5 ml-2 text-neutral-500" />
+          )}
+        </div>
+      </div>
+      
       <Button 
         variant="outline"
         size="sm"
         onClick={handleResetToCurrent}
         className="w-full flex items-center justify-center gap-1.5"
+        disabled={useRealTime}
       >
         <RotateCcw className="h-3.5 w-3.5" />
-        <span>Reset to Current Time</span>
+        <span>重置为当前时间</span>
       </Button>
     </div>
   );
