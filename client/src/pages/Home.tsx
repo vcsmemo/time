@@ -10,7 +10,7 @@ import AddLocationDialog from "@/components/AddLocationDialog";
 import { Location, defaultLocations } from "@/lib/locations";
 import { TimeData, convertTimeToAllLocations } from "@/lib/time";
 import { timezoneToUrlFormat } from "@/lib/utils";
-import { Clock, CalendarClock, Globe, Flag, BookOpen, MapPin } from "lucide-react";
+import { Clock, CalendarClock, Globe, Flag, BookOpen, MapPin, Layers, ArrowRight, Zap, Clock3, BarChart3, Cpu } from "lucide-react";
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useTheme } from "@/lib/ThemeContext";
 
@@ -203,11 +203,38 @@ export default function Home() {
         <main className="flex-grow container mx-auto px-4 py-6">
           <section className="mb-6">
             <header className="text-center mb-8">
-              <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 text-transparent bg-clip-text">
-                World Time Zone Converter
+              <div className="inline-flex items-center justify-center mb-3 bg-primary/10 rounded-full px-4 py-1">
+                <Cpu className="w-4 h-4 mr-2 text-primary" />
+                <span className="text-sm font-medium text-primary">超精准时区计算工具</span>
+              </div>
+              <h1 className="text-4xl font-extrabold mb-3 bg-gradient-to-r from-primary via-violet-600 to-primary/60 text-transparent bg-clip-text tracking-tight">
+                全球时区转换器
               </h1>
-              <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-                Compare local times across multiple cities and time zones. Perfect for scheduling international meetings, calls, and travel planning.
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-1">
+                    <Zap className="w-3 h-3 text-primary" />
+                  </div>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">实时同步</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-1">
+                    <Layers className="w-3 h-3 text-primary" />
+                  </div>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">多地时区比对</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-1">
+                    <BarChart3 className="w-3 h-3 text-primary" />
+                  </div>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">会议规划</span>
+                </div>
+              </div>
+              <div className="flex justify-center mb-2">
+                <div className="h-1 w-16 bg-gradient-to-r from-transparent via-primary/40 to-transparent rounded-full"></div>
+              </div>
+              <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto text-sm">
+                高效率跨时区协作工具 - 适用于国际会议安排、远程团队协作与全球业务规划
               </p>
             </header>
           </section>
@@ -216,24 +243,41 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left column - Current time and settings */}
             <div className="lg:col-span-4 space-y-6">
-              {/* Current Time Display */}
-              <article className="bg-white dark:bg-card rounded-lg shadow-sm overflow-hidden">
-                <div className="border-b border-neutral-200 dark:border-neutral-700 p-4 flex items-center">
-                  <Clock className="h-5 w-5 text-primary mr-2" />
-                  <h2 className="text-lg font-medium">Current Time</h2>
+              {/* Current Time Display - 科技感设计 */}
+              <article className="bg-white/80 dark:bg-gray-900/90 rounded-xl shadow-lg overflow-hidden backdrop-blur-sm border border-gray-100 dark:border-gray-800">
+                <div className="border-b border-gray-200/70 dark:border-gray-800/70 p-4 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-primary/10 rounded-md p-1 mr-2">
+                      <Clock className="h-5 w-5 text-primary" />
+                    </div>
+                    <h2 className="text-base font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/90">当前时间</h2>
+                  </div>
+                  <div className="px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-xs font-mono text-gray-600 dark:text-gray-300 flex items-center">
+                    <Clock3 className="h-3 w-3 mr-1 text-primary" />
+                    <span>{useRealTime ? "实时" : "手动"}</span>
+                  </div>
                 </div>
                 
-                <div className="p-4">
-                  <div className="mb-4">
+                <div className="p-5 relative">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 z-0"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-full -ml-12 -mb-12 z-0"></div>
+                  
+                  <div className="relative z-10 mb-5">
+                    <div className="flex justify-center items-center mb-1">
+                      <time 
+                        dateTime={selectedDateTime.toISOString()} 
+                        className="text-5xl font-bold text-center font-mono bg-gradient-to-r from-primary via-violet-600 to-primary/70 text-transparent bg-clip-text"
+                      >
+                        {selectedDateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      </time>
+                      <div className="ml-2 flex flex-col">
+                        <span className="text-xs font-mono text-gray-500 dark:text-gray-400">{selectedDateTime.toLocaleTimeString([], {second: '2-digit'})}</span>
+                        <span className="text-xs font-medium text-primary/70">秒</span>
+                      </div>
+                    </div>
                     <time 
                       dateTime={selectedDateTime.toISOString()} 
-                      className="text-4xl font-bold text-center block bg-gradient-to-r from-primary to-primary/80 text-transparent bg-clip-text"
-                    >
-                      {selectedDateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                    </time>
-                    <time 
-                      dateTime={selectedDateTime.toISOString()} 
-                      className="text-center text-sm mt-1 text-neutral-500 dark:text-neutral-300 block"
+                      className="text-center text-sm mt-1 text-gray-500 dark:text-gray-400 block font-medium"
                     >
                       {selectedDateTime.toLocaleDateString(undefined, { 
                         weekday: 'long', 
@@ -245,33 +289,45 @@ export default function Home() {
                   </div>
                   
                   <div className="flex justify-center">
-                    <div className="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium">
+                    <div className="bg-gradient-to-r from-primary/30 to-violet-500/30 text-primary px-4 py-2 rounded-lg text-sm font-medium border border-primary/20 shadow-sm flex items-center">
+                      <Globe className="h-4 w-4 mr-2 text-primary" />
                       {Intl.DateTimeFormat().resolvedOptions().timeZone.replace('_', ' ')}
                     </div>
                   </div>
                 </div>
               </article>
               
-              {/* Time Navigation Tools */}
-              <section className="bg-white dark:bg-card rounded-lg shadow-sm overflow-hidden">
-                <div className="border-b border-neutral-200 dark:border-neutral-700 p-4 flex items-center">
-                  <CalendarClock className="h-5 w-5 text-primary mr-2" />
-                  <h2 className="text-lg font-medium">Adjust Time</h2>
+              {/* Time Navigation Tools - 科技感设计 */}
+              <section className="bg-white/80 dark:bg-gray-900/90 rounded-xl shadow-lg overflow-hidden backdrop-blur-sm border border-gray-100 dark:border-gray-800">
+                <div className="border-b border-gray-200/70 dark:border-gray-800/70 p-4 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-primary/10 rounded-md p-1 mr-2">
+                      <CalendarClock className="h-5 w-5 text-primary" />
+                    </div>
+                    <h2 className="text-base font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/90">时间调整</h2>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className={`h-2 w-2 rounded-full ${useRealTime ? 'bg-green-500' : 'bg-amber-500'} animate-pulse`}></div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{useRealTime ? "自动同步" : "手动模式"}</span>
+                  </div>
                 </div>
-                <div className="p-4">
-                  <TimeNavigation 
-                    onDateTimeChange={handleDateTimeChange}
-                    selectedDateTime={selectedDateTime}
-                    useRealTime={useRealTime}
-                    onToggleRealTime={(value) => {
-                      setUseRealTime(value);
-                      // If user turns off live updates, stay at current time
-                      // If user turns on live updates, reset to current time
-                      if (value) {
-                        setSelectedDateTime(new Date());
-                      }
-                    }}
-                  />
+                <div className="p-4 relative">
+                  <div className="absolute bottom-0 right-0 w-20 h-20 bg-primary/5 rounded-full -mr-10 -mb-10 z-0"></div>
+                  <div className="relative z-10">
+                    <TimeNavigation 
+                      onDateTimeChange={handleDateTimeChange}
+                      selectedDateTime={selectedDateTime}
+                      useRealTime={useRealTime}
+                      onToggleRealTime={(value) => {
+                        setUseRealTime(value);
+                        // If user turns off live updates, stay at current time
+                        // If user turns on live updates, reset to current time
+                        if (value) {
+                          setSelectedDateTime(new Date());
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </section>
               
@@ -312,78 +368,87 @@ export default function Home() {
                 />
               </section>
               
-              {/* SEO-friendly content */}
-              <section className="bg-white dark:bg-card rounded-lg shadow-sm p-6 prose prose-sm dark:prose-invert max-w-none">
-                <h2 className="flex items-center text-lg font-medium mb-3">
-                  <Globe className="h-5 w-5 text-primary mr-2" />
-                  About World Time Zones
-                </h2>
-                
-                <p>
-                  World time zones are standardized time offsets used across the globe to coordinate time. 
-                  There are 24 main time zones, each approximately 15 degrees of longitude apart, 
-                  with local variations due to country boundaries and daylight saving adjustments.
-                </p>
-                
-                {selectedLocation && selectedLocationTime && (
-                  <div className="mt-4">
-                    <h3 className="text-base font-medium">Currently Viewing: {selectedLocation.name}</h3>
-                    <p>
-                      {selectedLocation.name} is located in {selectedLocation.country} and uses the 
-                      {' '}{selectedLocation.timezone} time zone. The current local time 
-                      is {selectedLocationTime.time} on {selectedLocationTime.date}.
-                    </p>
-                    <div className="mt-2">
-                      <Link href={`/city/${selectedLocation.country.toLowerCase().replace(/\s/g, '-')}/${selectedLocation.name.toLowerCase().replace(/\s/g, '-')}`} className="text-primary hover:underline">
-                        View detailed information about {selectedLocation.name}
+              {/* 精简版工具导航 */}
+              <section className="bg-white/80 dark:bg-gray-900/90 rounded-xl shadow-lg backdrop-blur-sm border border-gray-100 dark:border-gray-800">
+                <div className="p-4">
+                  {selectedLocation && selectedLocationTime && (
+                    <div className="mb-6 bg-gradient-to-r from-primary/10 to-transparent p-4 rounded-lg border border-primary/10">
+                      <div className="flex items-center mb-2">
+                        <div className="bg-primary/20 p-1.5 rounded-md">
+                          <MapPin className="h-4 w-4 text-primary" />
+                        </div>
+                        <h3 className="ml-2 text-base font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+                          {selectedLocation.name}, {selectedLocation.country}
+                        </h3>
+                        <div className="ml-auto bg-primary/5 px-2 py-1 rounded text-xs font-mono text-primary">
+                          {selectedLocation.timezone}
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-300 ml-1">
+                        当地时间：<span className="font-semibold text-gray-800 dark:text-gray-100">{selectedLocationTime.time}</span> · {selectedLocationTime.date}
+                      </div>
+                      <Link href={`/city/${selectedLocation.country.toLowerCase().replace(/\s/g, '-')}/${selectedLocation.name.toLowerCase().replace(/\s/g, '-')}`} 
+                            className="mt-3 inline-flex items-center text-xs font-medium text-primary hover:text-primary/80 transition-colors">
+                        详细信息 <ArrowRight className="ml-1 h-3 w-3" />
                       </Link>
                     </div>
-                  </div>
-                )}
-                
-                <h3 className="text-base font-medium mt-4">Time Zone Basics</h3>
-                <ul>
-                  <li>Each time zone is typically based on 15° longitude intervals</li>
-                  <li>Coordinated Universal Time (UTC) is the primary time standard</li>
-                  <li>Some countries span multiple time zones</li>
-                  <li>Daylight Saving Time adds temporary offsets in many regions</li>
-                  <li>Time zones can be written as UTC offsets (e.g., UTC+8, UTC-5)</li>
-                </ul>
-                
-                <p className="text-sm text-neutral-500 dark:text-neutral-300 mt-4">
-                  This tool helps you convert times between different time zones and plan 
-                  international calls, meetings, and travel with accurate local time information.
-                </p>
-                
-                <div className="not-prose mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-base font-medium mb-3">Explore More Time Resources</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <Link href="/timezones">
-                      <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
-                        <Clock className="h-4 w-4 mr-2" />
-                        Browse All Time Zones
-                      </div>
-                    </Link>
-                    <Link href="/countries">
-                      <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
-                        <Flag className="h-4 w-4 mr-2" />
-                        View Countries & Their Time Zones
-                      </div>
-                    </Link>
-                    <Link href="/blog">
-                      <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
-                        <BookOpen className="h-4 w-4 mr-2" />
-                        Read Time Zone Articles
-                      </div>
-                    </Link>
-                    {selectedLocation && (
-                      <Link href={`/timezone/${timezoneToUrlFormat(selectedLocation.timezone)}`}>
-                        <div className="flex items-center p-3 rounded-md bg-primary/10 hover:bg-primary/20 transition-colors text-sm text-primary font-medium">
-                          <MapPin className="h-4 w-4 mr-2" />
-                          Explore {selectedLocation.timezone.replace(/_/g, ' ')}
+                  )}
+                  
+                  {/* 快捷功能卡片 */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <Link href="/meeting-planner" className="group">
+                      <div className="flex flex-col h-full p-4 rounded-lg bg-gradient-to-br from-primary/5 to-violet-500/5 border border-primary/10 hover:border-primary/30 transition-all hover:shadow-md">
+                        <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
+                          <CalendarClock className="h-5 w-5 text-primary" />
                         </div>
-                      </Link>
-                    )}
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">会议规划器</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">安排跨时区会议并自动生成日历邀请链接</p>
+                      </div>
+                    </Link>
+                    
+                    <Link href="/comparison" className="group">
+                      <div className="flex flex-col h-full p-4 rounded-lg bg-gradient-to-br from-primary/5 to-violet-500/5 border border-primary/10 hover:border-primary/30 transition-all hover:shadow-md">
+                        <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
+                          <BarChart3 className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">时区对比</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">可视化比较多个地区的时间差异和工作时间重叠</p>
+                      </div>
+                    </Link>
+                    
+                    <Link href="/countries" className="group">
+                      <div className="flex flex-col h-full p-4 rounded-lg bg-gradient-to-br from-primary/5 to-violet-500/5 border border-primary/10 hover:border-primary/30 transition-all hover:shadow-md">
+                        <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
+                          <Flag className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">国家时区</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">按国家浏览不同的城市和对应时区信息</p>
+                      </div>
+                    </Link>
+                    
+                    <Link href="/timezones" className="group">
+                      <div className="flex flex-col h-full p-4 rounded-lg bg-gradient-to-br from-primary/5 to-violet-500/5 border border-primary/10 hover:border-primary/30 transition-all hover:shadow-md">
+                        <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
+                          <Globe className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">全球时区</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">查看所有国际时区和UTC偏移值</p>
+                      </div>
+                    </Link>
+                  </div>
+                  
+                  {/* 底部信息 */}
+                  <div className="mt-6 pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                    <div className="flex items-center">
+                      <div className="bg-primary/10 p-1 rounded">
+                        <Clock3 className="h-3.5 w-3.5 text-primary" />
+                      </div>
+                      <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">实时更新的全球时区转换工具</span>
+                    </div>
+                    
+                    <Link href="/about" className="text-xs text-primary hover:text-primary/80 transition-colors">
+                      关于工具
+                    </Link>
                   </div>
                 </div>
               </section>

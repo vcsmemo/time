@@ -495,12 +495,13 @@ export default function MeetingPlanner({
                   />
                 </div>
                 {showCalendar && (
-                  <div className="absolute z-10 mt-1 bg-background border rounded-md shadow-md">
+                  <div className="absolute z-50 mt-1 bg-background border rounded-md shadow-lg" style={{ backgroundColor: 'var(--background)', opacity: 1 }}>
                     <Calendar
                       mode="single"
                       selected={selectedDate}
                       onSelect={handleDateSelect}
                       initialFocus
+                      className="bg-white dark:bg-gray-900 shadow-xl"
                     />
                   </div>
                 )}
