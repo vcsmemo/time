@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Input } from './ui/input';
@@ -17,7 +18,18 @@ import {
   SelectValue,
 } from './ui/select';
 import { Badge } from './ui/badge';
-import { Clock, Calendar as CalendarIcon, Plus, X, ArrowDownUp } from 'lucide-react';
+import { 
+  Clock, 
+  Calendar as CalendarIcon, 
+  Plus, 
+  X, 
+  ArrowDownUp,
+  Users,
+  MapPin,
+  ChevronRight,
+  Star,
+  Check
+} from 'lucide-react';
 import { formatDateForInput, formatTimeForInput, parseDateTimeFromInputs } from '../lib/utils';
 
 interface MeetingPlannerProps {
@@ -47,6 +59,19 @@ export default function MeetingPlanner({
   const [showCalendar, setShowCalendar] = useState(false);
   const [newParticipantName, setNewParticipantName] = useState('');
   const [newParticipantLocation, setNewParticipantLocation] = useState('');
+  const [showAnimatedCard, setShowAnimatedCard] = useState(false);
+  const [animatedCardData, setAnimatedCardData] = useState<{
+    title: string;
+    date: string;
+    time: string;
+    duration: string;
+    participants: Array<{
+      name: string;
+      location: string;
+      timezone: string;
+      localTime: string;
+    }>;
+  } | null>(null);
 
   // Format date for display
   const dateString = formatDateForInput(selectedDate);
@@ -253,13 +278,166 @@ export default function MeetingPlanner({
         });
     });
     
+    // Show the animated card
+    const cardData = {
+      title: title,
+      date: dateString,
+      time: selectedTime,
+      duration: meetingDuration,
+      participants: meetingData.participants
+    };
+    
+    setAnimatedCardData(cardData);
+    setShowAnimatedCard(true);
+    
+    // Close the card after some time
+    setTimeout(() => {
+      setShowAnimatedCard(false);
+    }, 7000); // Show for 7 seconds
+
     dialog.showModal();
     
     return websiteLink;
   };
 
   return (
-    <Card className="w-full">
+    <>
+      {/* Animated Meeting Card - this appears when a meeting is created */}
+      <AnimatePresence>
+        {showAnimatedCard && animatedCardData && (
+          <motion.div 
+            className="fixed inset-0 flex items-center justify-center z-50 bg-black/50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowAnimatedCard(false)}
+          >
+            <motion.div 
+              className="bg-gradient-to-br from-primary/90 to-primary/60 rounded-lg shadow-xl w-full max-w-md overflow-hidden text-white p-0"
+              initial={{ scale: 0.8, y: 50, opacity: 0 }}
+              animate={{ 
+                scale: 1, 
+                y: 0, 
+                opacity: 1,
+                transition: { 
+                  delay: 0.2,
+                  type: "spring",
+                  stiffness: 100
+                } 
+              }}
+              exit={{ scale: 0.8, y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6">
+                <motion.div 
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1, transition: { delay: 0.4 } }}
+                  className="flex items-center justify-between mb-4"
+                >
+                  <div className="flex items-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1, transition: { delay: 0.6, type: "spring" } }}
+                      className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4"
+                    >
+                      <CalendarIcon className="w-6 h-6 text-white" />
+                    </motion.div>
+                    <div>
+                      <h4 className="text-xl font-bold mb-1">{animatedCardData.title}</h4>
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: "100%", transition: { delay: 1, duration: 0.8 } }}
+                        className="h-0.5 bg-white/40 rounded-full"
+                      />
+                    </div>
+                  </div>
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1, transition: { delay: 1.2 } }}
+                    className="flex items-center justify-center w-8 h-8 bg-white/20 rounded-full"
+                  >
+                    <Check className="w-4 h-4 text-white" />
+                  </motion.div>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1, transition: { delay: 0.8 } }}
+                  className="bg-white/10 p-4 rounded-lg mb-4"
+                >
+                  <div className="flex items-center mb-3">
+                    <Clock className="w-5 h-5 mr-2 text-white/80" />
+                    <span className="text-white/80 text-sm font-medium">Meeting Time</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="text-xl font-bold">{animatedCardData.time}</div>
+                      <div className="text-white/70 text-sm">{animatedCardData.date}</div>
+                    </div>
+                    <div className="bg-white/20 px-3 py-1 rounded-full text-sm">
+                      {animatedCardData.duration} min
+                    </div>
+                  </div>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
+                >
+                  <div className="flex items-center mb-3">
+                    <Users className="w-5 h-5 mr-2 text-white/80" />
+                    <span className="text-white/80 text-sm font-medium">Participants</span>
+                  </div>
+                  
+                  <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                    {animatedCardData.participants.map((participant, index) => (
+                      <motion.div
+                        key={`participant-${index}`}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ 
+                          x: 0, 
+                          opacity: 1, 
+                          transition: { 
+                            delay: 1.2 + (index * 0.1),
+                            type: "spring",
+                            stiffness: 100
+                          } 
+                        }}
+                        className="flex items-center justify-between bg-white/10 p-2 rounded"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-3">
+                            <span className="text-xs font-bold">{participant.name.substring(0, 2).toUpperCase()}</span>
+                          </div>
+                          <div>
+                            <div className="font-medium">{participant.name}</div>
+                            <div className="text-xs text-white/70">{participant.location}</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-mono">{participant.localTime}</div>
+                          <div className="text-xs text-white/70">{participant.timezone}</div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+                
+                <motion.div
+                  className="mt-6 text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { delay: 1.4 } }}
+                >
+                  <p className="text-white/70 text-sm mb-2">Calendar invitation created successfully</p>
+                  <p className="text-white/90 text-xs">Click anywhere to close</p>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    
+      <Card className="w-full">
       <CardHeader className="bg-gradient-to-r from-primary/10 to-transparent pb-2">
         <CardTitle className="flex justify-between items-center">
           <span className="font-bold text-xl flex items-center gap-2">
@@ -499,5 +677,6 @@ export default function MeetingPlanner({
         </div>
       </CardContent>
     </Card>
+    </>
   );
 }
