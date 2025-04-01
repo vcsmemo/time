@@ -126,9 +126,9 @@ export default function MeetingPlanner({
     const startDate = new Date(year, month - 1, day, hours, minutes);
     const endDate = new Date(new Date(startDate).setMinutes(startDate.getMinutes() + parseInt(meetingDuration)));
     
-    // Format dates for iCalendar format (YYYYMMDDTHHMMSSZ)
-    const formatDateForIcal = (date: Date) => {
-      return date.toISOString().replace(/-|:|\.\d+/g, '');
+    // Format dates for RFC3339 format (Used in mailto: calendar format)
+    const formatDateForRFC3339 = (date: Date) => {
+      return date.toISOString().replace(/\.\d{3}/, '');
     };
     
     // Generate a description with participant information
@@ -139,29 +139,7 @@ export default function MeetingPlanner({
       description += `- ${p.name} (${location?.name}, ${location?.country}): ${localTime}\n`;
     });
     
-    // Create the iCalendar data
-    const icalData = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//GlobalTimeConverter//Meeting Planner//EN',
-      'CALSCALE:GREGORIAN',
-      'METHOD:REQUEST',
-      'BEGIN:VEVENT',
-      `UID:${Math.random().toString(36).substring(2, 15)}@globaltimeconverter.com`,
-      `DTSTAMP:${formatDateForIcal(new Date())}`,
-      `DTSTART:${formatDateForIcal(startDate)}`,
-      `DTEND:${formatDateForIcal(endDate)}`,
-      `SUMMARY:${title}`,
-      `DESCRIPTION:${description.replace(/\n/g, '\\n')}`,
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\r\n');
-    
-    // Create a data URL from the iCalendar data
-    const icalBlob = new Blob([icalData], { type: 'text/calendar;charset=utf-8' });
-    const icalUrl = URL.createObjectURL(icalBlob);
-    
-    // Also create a regular meeting data object for website sharing
+    // Create a regular meeting data object for website sharing
     const meetingData = {
       id: Math.random().toString(36).substring(2, 10),
       title: title,
@@ -189,32 +167,52 @@ export default function MeetingPlanner({
     }).toString();
     
     // Create the full website link
-    const meetingLink = `${window.location.origin}/meeting-planner?${queryString}`;
+    const websiteLink = `${window.location.origin}/meeting-planner?${queryString}`;
     
-    // Create a temporary anchor element to trigger download
-    const link = document.createElement('a');
-    link.href = icalUrl;
-    link.setAttribute('download', `${title.replace(/\s+/g, '_')}.ics`);
-    document.body.appendChild(link);
-    link.click();
+    // Create the mailto: link with calendar invitation embedded
+    // This format will cause the email client to recognize it as a calendar event
+    const mailtoSubject = encodeURIComponent(`Invitation: ${title}`);
+    const mailtoBody = encodeURIComponent(description + "\n\n" + 
+      "You can view this meeting online at: " + websiteLink);
+    const mailtoLocation = encodeURIComponent(`${participants[0]?.name || ""} location`);
     
-    // Clean up
-    setTimeout(() => {
-      document.body.removeChild(link);
-      URL.revokeObjectURL(icalUrl);
-    }, 100);
+    // These parameters are recognized by email clients to format the email as a calendar invite
+    const mailtoStart = encodeURIComponent(formatDateForRFC3339(startDate));
+    const mailtoEnd = encodeURIComponent(formatDateForRFC3339(endDate));
     
-    // Copy website link to clipboard as fallback
-    navigator.clipboard.writeText(meetingLink)
+    // Create the full mailto link with calendar parameters
+    const mailtoLink = `mailto:?subject=${mailtoSubject}&body=${mailtoBody}&location=${mailtoLocation}&start=${mailtoStart}&end=${mailtoEnd}`;
+    
+    // Copy the mailto link to clipboard
+    navigator.clipboard.writeText(mailtoLink)
       .then(() => {
-        alert("Calendar invitation downloaded and meeting link copied to clipboard!");
+        alert("会议日历邀请链接已复制到剪贴板！粘贴到邮件中可直接显示为日历邀请。");
       })
       .catch(err => {
         console.error('Failed to copy link: ', err);
-        alert("Calendar invitation downloaded! You can share it via email.");
+        
+        // Create a dialog with the email link to manually copy
+        const dialog = document.createElement('dialog');
+        dialog.innerHTML = `
+          <div style="padding: 20px; max-width: 500px;">
+            <h3 style="margin-top: 0;">会议日历邀请链接</h3>
+            <p>复制此链接并粘贴到邮件中，显示为日历邀请：</p>
+            <textarea style="width: 100%; height: 80px; margin-bottom: 10px;">${mailtoLink}</textarea>
+            <button style="padding: 8px 16px;">关闭</button>
+          </div>
+        `;
+        document.body.appendChild(dialog);
+        
+        const closeBtn = dialog.querySelector('button');
+        closeBtn?.addEventListener('click', () => {
+          dialog.close();
+          document.body.removeChild(dialog);
+        });
+        
+        dialog.showModal();
       });
       
-    return meetingLink;
+    return mailtoLink;
   };
 
   return (
@@ -431,12 +429,12 @@ export default function MeetingPlanner({
                 <div className="mb-3">
                   <h3 className="text-lg font-medium flex items-center gap-2">
                     <Clock className="h-4 w-4 text-primary" />
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">Meeting Summary</span>
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">会议摘要</span>
                   </h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    <strong className="font-semibold">{meetingTitle || "Untitled Meeting"}</strong> will start on <strong className="font-mono">{dateString}</strong> at <strong className="font-mono">{selectedTime}</strong>,
-                    lasting for <strong>{meetingDuration}</strong> minute{meetingDuration !== '1' ? 's' : ''}. 
-                    There {participants.length === 1 ? 'is' : 'are'} {participants.length} participant{participants.length !== 1 ? 's' : ''} from different time zones.
+                    <strong className="font-semibold">{meetingTitle || "未命名会议"}</strong> 将于 <strong className="font-mono">{dateString}</strong> 的 <strong className="font-mono">{selectedTime}</strong> 开始，
+                    持续 <strong>{meetingDuration}</strong> 分钟。
+                    来自不同时区的 <strong>{participants.length}</strong> 名参与者已添加到会议中。
                   </p>
                 </div>
 
@@ -445,12 +443,12 @@ export default function MeetingPlanner({
                   onClick={generateMeetingLink}
                 >
                   <Calendar className="h-4 w-4 mr-2" />
-                  Generate Calendar Invitation
+                  生成会议日历邀请链接
                 </Button>
 
                 <p className="text-xs text-center text-muted-foreground">
-                  Creates a shareable link that contains meeting details formatted as a calendar event.
-                  The recipient can add this meeting directly to their calendar.
+                  生成一个特殊的邮件链接，当复制到邮件客户端中时，会自动显示为会议日历邀请，
+                  而不是普通链接。收件人可以直接接受邀请添加到日历中。
                 </p>
               </div>
             </>
