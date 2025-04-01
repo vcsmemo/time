@@ -495,14 +495,28 @@ export default function MeetingPlanner({
                   />
                 </div>
                 {showCalendar && (
-                  <div className="absolute z-50 mt-1 bg-background border rounded-md shadow-lg" style={{ backgroundColor: 'var(--background)', opacity: 1 }}>
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={handleDateSelect}
-                      initialFocus
-                      className="bg-white dark:bg-gray-900 shadow-xl"
-                    />
+                  <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 border-2 border-primary/20 rounded-xl shadow-2xl" style={{ backgroundColor: 'white' }}>
+                    <div className="p-2 bg-gradient-to-r from-primary/10 to-primary/5 border-b border-primary/10 flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-700">Select Date</span>
+                      <button 
+                        onClick={() => setShowCalendar(false)}
+                        className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="p-3 bg-white dark:bg-gray-800">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={(date) => {
+                          handleDateSelect(date);
+                          setShowCalendar(false);
+                        }}
+                        initialFocus
+                        className="bg-white dark:bg-gray-800"
+                      />
+                    </div>
                   </div>
                 )}
               </div>

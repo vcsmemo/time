@@ -205,36 +205,36 @@ export default function Home() {
             <header className="text-center mb-8">
               <div className="inline-flex items-center justify-center mb-3 bg-primary/10 rounded-full px-4 py-1">
                 <Cpu className="w-4 h-4 mr-2 text-primary" />
-                <span className="text-sm font-medium text-primary">超精准时区计算工具</span>
+                <span className="text-sm font-medium text-primary">High-Precision Time Zone Calculator</span>
               </div>
               <h1 className="text-4xl font-extrabold mb-3 bg-gradient-to-r from-primary via-violet-600 to-primary/60 text-transparent bg-clip-text tracking-tight">
-                全球时区转换器
+                Global Time Zone Converter
               </h1>
               <div className="flex items-center justify-center gap-4 mb-4">
                 <div className="flex items-center">
                   <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-1">
                     <Zap className="w-3 h-3 text-primary" />
                   </div>
-                  <span className="text-sm text-gray-600 dark:text-gray-300">实时同步</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Real-time Sync</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-1">
                     <Layers className="w-3 h-3 text-primary" />
                   </div>
-                  <span className="text-sm text-gray-600 dark:text-gray-300">多地时区比对</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Multi-zone Compare</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-1">
                     <BarChart3 className="w-3 h-3 text-primary" />
                   </div>
-                  <span className="text-sm text-gray-600 dark:text-gray-300">会议规划</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Meeting Planner</span>
                 </div>
               </div>
               <div className="flex justify-center mb-2">
                 <div className="h-1 w-16 bg-gradient-to-r from-transparent via-primary/40 to-transparent rounded-full"></div>
               </div>
               <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto text-sm">
-                高效率跨时区协作工具 - 适用于国际会议安排、远程团队协作与全球业务规划
+                Efficient cross-time zone collaboration tool - Perfect for international meeting scheduling, remote team coordination, and global business planning
               </p>
             </header>
           </section>
@@ -250,11 +250,11 @@ export default function Home() {
                     <div className="bg-primary/10 rounded-md p-1 mr-2">
                       <Clock className="h-5 w-5 text-primary" />
                     </div>
-                    <h2 className="text-base font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/90">当前时间</h2>
+                    <h2 className="text-base font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/90">Current Time</h2>
                   </div>
                   <div className="px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-xs font-mono text-gray-600 dark:text-gray-300 flex items-center">
                     <Clock3 className="h-3 w-3 mr-1 text-primary" />
-                    <span>{useRealTime ? "实时" : "手动"}</span>
+                    <span>{useRealTime ? "Live" : "Manual"}</span>
                   </div>
                 </div>
                 
@@ -272,7 +272,7 @@ export default function Home() {
                       </time>
                       <div className="ml-2 flex flex-col">
                         <span className="text-xs font-mono text-gray-500 dark:text-gray-400">{selectedDateTime.toLocaleTimeString([], {second: '2-digit'})}</span>
-                        <span className="text-xs font-medium text-primary/70">秒</span>
+                        <span className="text-xs font-medium text-primary/70">sec</span>
                       </div>
                     </div>
                     <time 
@@ -304,11 +304,11 @@ export default function Home() {
                     <div className="bg-primary/10 rounded-md p-1 mr-2">
                       <CalendarClock className="h-5 w-5 text-primary" />
                     </div>
-                    <h2 className="text-base font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/90">时间调整</h2>
+                    <h2 className="text-base font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/90">Adjust Time</h2>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className={`h-2 w-2 rounded-full ${useRealTime ? 'bg-green-500' : 'bg-amber-500'} animate-pulse`}></div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{useRealTime ? "自动同步" : "手动模式"}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{useRealTime ? "Auto Sync" : "Manual Mode"}</span>
                   </div>
                 </div>
                 <div className="p-4 relative">
@@ -385,11 +385,11 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="text-sm text-gray-600 dark:text-gray-300 ml-1">
-                        当地时间：<span className="font-semibold text-gray-800 dark:text-gray-100">{selectedLocationTime.time}</span> · {selectedLocationTime.date}
+                        Local time: <span className="font-semibold text-gray-800 dark:text-gray-100">{selectedLocationTime.time}</span> · {selectedLocationTime.date}
                       </div>
                       <Link href={`/city/${selectedLocation.country.toLowerCase().replace(/\s/g, '-')}/${selectedLocation.name.toLowerCase().replace(/\s/g, '-')}`} 
                             className="mt-3 inline-flex items-center text-xs font-medium text-primary hover:text-primary/80 transition-colors">
-                        详细信息 <ArrowRight className="ml-1 h-3 w-3" />
+                        More details <ArrowRight className="ml-1 h-3 w-3" />
                       </Link>
                     </div>
                   )}
@@ -401,8 +401,8 @@ export default function Home() {
                         <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
                           <CalendarClock className="h-5 w-5 text-primary" />
                         </div>
-                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">会议规划器</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">安排跨时区会议并自动生成日历邀请链接</p>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">Meeting Planner</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Schedule cross-timezone meetings with calendar invites</p>
                       </div>
                     </Link>
                     
@@ -411,8 +411,8 @@ export default function Home() {
                         <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
                           <BarChart3 className="h-5 w-5 text-primary" />
                         </div>
-                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">时区对比</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">可视化比较多个地区的时间差异和工作时间重叠</p>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">Time Comparison</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Visual comparison of time differences across regions</p>
                       </div>
                     </Link>
                     
@@ -421,8 +421,8 @@ export default function Home() {
                         <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
                           <Flag className="h-5 w-5 text-primary" />
                         </div>
-                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">国家时区</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">按国家浏览不同的城市和对应时区信息</p>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">Countries</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Browse cities and time zones by country</p>
                       </div>
                     </Link>
                     
@@ -431,8 +431,8 @@ export default function Home() {
                         <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
                           <Globe className="h-5 w-5 text-primary" />
                         </div>
-                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">全球时区</h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">查看所有国际时区和UTC偏移值</p>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">Time Zones</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Explore all global time zones and UTC offsets</p>
                       </div>
                     </Link>
                   </div>
@@ -443,11 +443,11 @@ export default function Home() {
                       <div className="bg-primary/10 p-1 rounded">
                         <Clock3 className="h-3.5 w-3.5 text-primary" />
                       </div>
-                      <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">实时更新的全球时区转换工具</span>
+                      <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">Real-time global time zone converter</span>
                     </div>
                     
                     <Link href="/about" className="text-xs text-primary hover:text-primary/80 transition-colors">
-                      关于工具
+                      About
                     </Link>
                   </div>
                 </div>
