@@ -13,6 +13,7 @@ import CountryPage from "@/pages/CountryPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogArticlePage from "@/pages/BlogArticlePage";
 import MeetingPlannerPage from "@/pages/MeetingPlannerPage";
+import TimeComparisonPage from "@/pages/TimeComparisonPage";
 import { ThemeProvider } from "./lib/ThemeContext";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/city/:country/:city" component={CityPage} />
       <Route path="/compare/:from/:to" component={ComparisonPage} />
       <Route path="/comparison" component={ComparisonPage} />
+      <Route path="/time-comparison" component={TimeComparisonPage} />
       <Route path="/timezones" component={TimeZonesPage} />
       <Route path="/countries" component={CountriesPage} />
       <Route path="/country/:country" component={CountryPage} />

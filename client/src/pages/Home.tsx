@@ -406,7 +406,7 @@ export default function Home() {
                       </div>
                     </Link>
                     
-                    <Link href="/comparison" className="group">
+                    <Link href="/time-comparison" className="group">
                       <div className="flex flex-col h-full p-4 rounded-lg bg-gradient-to-br from-primary/5 to-violet-500/5 border border-primary/10 hover:border-primary/30 transition-all hover:shadow-md">
                         <div className="rounded-full bg-primary/10 w-10 h-10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
                           <BarChart3 className="h-5 w-5 text-primary" />
