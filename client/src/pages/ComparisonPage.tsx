@@ -19,9 +19,19 @@ export default function ComparisonPage() {
   const [timeData, setTimeData] = useState<Map<string, TimeData>>(new Map<string, TimeData>());
   
   // Extract city parameters from the URL
-  const [, params] = useRoute('/compare/:from/:to');
-  const fromCityId = params?.from;
-  const toCityId = params?.to;
+  const [matchesCompare, paramsCompare] = useRoute('/compare/:from/:to');
+  const [matchesComparison] = useRoute('/comparison');
+  
+  // Use default locations if on the /comparison route
+  let fromCityId = paramsCompare?.from;
+  let toCityId = paramsCompare?.to;
+  
+  // If on the '/comparison' route, use default cities
+  if (matchesComparison) {
+    // Choose New York and London by default
+    fromCityId = 'new-york-us';
+    toCityId = 'london-uk';
+  }
   
   // Find the locations in our database
   const fromLocation = defaultLocations.find(loc => loc.id === fromCityId);

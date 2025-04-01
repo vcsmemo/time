@@ -22,6 +22,7 @@ function Router() {
       <Route path="/timezone/:timezone" component={TimeZonePage} />
       <Route path="/city/:country/:city" component={CityPage} />
       <Route path="/compare/:from/:to" component={ComparisonPage} />
+      <Route path="/comparison" component={ComparisonPage} />
       <Route path="/timezones" component={TimeZonesPage} />
       <Route path="/countries" component={CountriesPage} />
       <Route path="/country/:country" component={CountryPage} />
