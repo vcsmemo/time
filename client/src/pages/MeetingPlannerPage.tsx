@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Container } from '@/components/ui/container';
-import TimeNavigation from '../components/TimeNavigation';
 import MeetingPlanner from '../components/MeetingPlanner';
 import { useTheme } from '../lib/ThemeContext';
 import { Location, defaultLocations, searchLocation } from '../lib/locations';
 import { TimeData, convertTimeToAllLocations } from '../lib/time';
 import { parseDateTimeFromInputs } from '../lib/utils';
 import { useLocation } from 'wouter';
+import { Globe } from 'lucide-react';
 
 export default function MeetingPlannerPage() {
   const { isDarkMode } = useTheme();
@@ -119,19 +119,22 @@ export default function MeetingPlannerPage() {
       </Helmet>
 
       <Container>
-        <div className="py-6 space-y-6">
-          <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold">Meeting Planner</h1>
-            <p className="text-muted-foreground">
-              Schedule meetings for participants across different time zones, view each attendee's local time, and ensure the meeting time works for everyone.
-            </p>
-
-            <TimeNavigation
-              selectedDateTime={selectedDateTime}
-              onDateTimeChange={handleDateTimeChange}
-              useRealTime={useRealTime}
-              onToggleRealTime={setUseRealTime}
-            />
+        <div className="py-4 space-y-4">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold">Meeting Planner</h1>
+                <p className="text-sm text-muted-foreground">
+                  Schedule meetings across different time zones with ease
+                </p>
+              </div>
+              <a href="/" className="no-underline">
+                <div className="flex items-center text-sm font-medium px-3 py-2 bg-primary/10 hover:bg-primary/20 rounded-md transition-colors">
+                  <Globe className="h-4 w-4 mr-2" />
+                  Back to Home
+                </div>
+              </a>
+            </div>
 
             <DragDropContext onDragEnd={handleDragEnd}>
               <MeetingPlanner
