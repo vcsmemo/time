@@ -25,6 +25,9 @@ interface MeetingPlannerProps {
   timeData: Map<string, TimeData>;
   selectedDateTime: Date;
   onDateTimeChange: (date: Date) => void;
+  initialParticipants?: Array<{ locationId: string; name: string }>;
+  initialMeetingTitle?: string;
+  initialMeetingDuration?: string;
 }
 
 export default function MeetingPlanner({
@@ -32,12 +35,15 @@ export default function MeetingPlanner({
   timeData,
   selectedDateTime,
   onDateTimeChange,
+  initialParticipants = [],
+  initialMeetingTitle = '',
+  initialMeetingDuration = '60',
 }: MeetingPlannerProps) {
-  const [meetingTitle, setMeetingTitle] = useState('');
-  const [meetingDuration, setMeetingDuration] = useState('60');
+  const [meetingTitle, setMeetingTitle] = useState(initialMeetingTitle);
+  const [meetingDuration, setMeetingDuration] = useState(initialMeetingDuration);
   const [selectedDate, setSelectedDate] = useState<Date>(selectedDateTime);
   const [selectedTime, setSelectedTime] = useState(formatTimeForInput(selectedDateTime));
-  const [participants, setParticipants] = useState<Array<{ locationId: string; name: string }>>([]);
+  const [participants, setParticipants] = useState<Array<{ locationId: string; name: string }>>(initialParticipants);
   const [showCalendar, setShowCalendar] = useState(false);
   const [newParticipantName, setNewParticipantName] = useState('');
   const [newParticipantLocation, setNewParticipantLocation] = useState('');
@@ -109,19 +115,58 @@ export default function MeetingPlanner({
 
   // Generate a meeting link/invite
   const generateMeetingLink = () => {
-    // In a real application, this would generate a shareable link with the meeting details
-    // For now, we'll just return a placeholder
-    return `https://timezonemeet.com/meeting/${Math.random().toString(36).substring(2, 10)}`;
+    // Create a meeting object with all the necessary details
+    const meetingData = {
+      id: Math.random().toString(36).substring(2, 10),
+      title: meetingTitle || "Untitled Meeting",
+      date: dateString,
+      time: selectedTime,
+      duration: meetingDuration,
+      participants: participants.map(p => {
+        const location = getLocationById(p.locationId);
+        const localTime = location ? timeData.get(location.id)?.time || 'Unknown time' : 'Unknown time';
+        return {
+          name: p.name,
+          location: location ? `${location.name}, ${location.country}` : 'Unknown location',
+          timezone: location?.timezone || 'Unknown timezone',
+          localTime
+        };
+      })
+    };
+    
+    // Encode the meeting data to share in the URL
+    const encodedData = encodeURIComponent(JSON.stringify(meetingData));
+    
+    // Build a query string to append to the URL
+    const queryString = new URLSearchParams({
+      meeting: encodedData
+    }).toString();
+    
+    // Create the full link
+    const meetingLink = `${window.location.origin}/meeting-planner?${queryString}`;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(meetingLink)
+      .then(() => {
+        alert("Meeting invitation link copied to clipboard!");
+      })
+      .catch(err => {
+        console.error('Failed to copy link: ', err);
+        alert("Meeting link generated. Right-click to copy the link from the button.");
+      });
+      
+    // Return the link for the button to use
+    return meetingLink;
   };
 
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
-          <span>会议安排工具</span>
+          <span>Meeting Planner</span>
           <Badge variant="outline" className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            参与者时区转换
+            Time Zone Converter
           </Badge>
         </CardTitle>
       </CardHeader>
@@ -129,10 +174,10 @@ export default function MeetingPlanner({
         <div className="space-y-4">
           {/* Meeting details */}
           <div className="space-y-2">
-            <Label htmlFor="meeting-title">会议名称</Label>
+            <Label htmlFor="meeting-title">Meeting Title</Label>
             <Input
               id="meeting-title"
-              placeholder="请输入会议名称"
+              placeholder="Enter meeting title"
               value={meetingTitle}
               onChange={(e) => setMeetingTitle(e.target.value)}
             />
@@ -140,7 +185,7 @@ export default function MeetingPlanner({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="meeting-date">会议日期</Label>
+              <Label htmlFor="meeting-date">Meeting Date</Label>
               <div className="relative">
                 <div className="flex">
                   <Input
@@ -175,7 +220,7 @@ export default function MeetingPlanner({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="meeting-time">会议时间</Label>
+              <Label htmlFor="meeting-time">Meeting Time</Label>
               <Input
                 id="meeting-time"
                 type="time"
@@ -186,18 +231,18 @@ export default function MeetingPlanner({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="meeting-duration">会议时长</Label>
+            <Label htmlFor="meeting-duration">Duration</Label>
             <Select value={meetingDuration} onValueChange={setMeetingDuration}>
               <SelectTrigger>
-                <SelectValue placeholder="选择会议时长" />
+                <SelectValue placeholder="Select meeting duration" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="30">30 分钟</SelectItem>
-                  <SelectItem value="60">1 小时</SelectItem>
-                  <SelectItem value="90">1.5 小时</SelectItem>
-                  <SelectItem value="120">2 小时</SelectItem>
-                  <SelectItem value="180">3 小时</SelectItem>
+                  <SelectItem value="30">30 minutes</SelectItem>
+                  <SelectItem value="60">1 hour</SelectItem>
+                  <SelectItem value="90">1.5 hours</SelectItem>
+                  <SelectItem value="120">2 hours</SelectItem>
+                  <SelectItem value="180">3 hours</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -207,17 +252,17 @@ export default function MeetingPlanner({
 
           {/* Add participant */}
           <div className="space-y-2">
-            <Label>添加参与者</Label>
+            <Label>Add Participant</Label>
             <div className="flex flex-col md:flex-row gap-2">
               <Input
-                placeholder="参与者姓名"
+                placeholder="Participant name"
                 value={newParticipantName}
                 onChange={(e) => setNewParticipantName(e.target.value)}
                 className="flex-1"
               />
               <Select value={newParticipantLocation} onValueChange={setNewParticipantLocation}>
                 <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="选择位置" />
+                  <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -234,7 +279,7 @@ export default function MeetingPlanner({
                 onClick={handleAddParticipant}
                 disabled={!newParticipantName || !newParticipantLocation}
               >
-                <Plus className="h-4 w-4 mr-1" /> 添加
+                <Plus className="h-4 w-4 mr-1" /> Add
               </Button>
             </div>
           </div>
@@ -242,10 +287,10 @@ export default function MeetingPlanner({
           {/* Participants list */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <Label>参与者列表</Label>
+              <Label>Participants List</Label>
               {participants.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
-                  {participants.length} 位参与者
+                  {participants.length} participant{participants.length !== 1 ? 's' : ''}
                 </Badge>
               )}
             </div>
@@ -260,14 +305,14 @@ export default function MeetingPlanner({
                   >
                     {participants.length === 0 ? (
                       <div className="text-center py-4 text-muted-foreground">
-                        尚未添加参与者
+                        No participants added yet
                       </div>
                     ) : (
                       participants.map((participant, index) => {
                         const location = getLocationById(participant.locationId);
                         const localTime = location
-                          ? timeData.get(location.id)?.time || '时间数据不可用'
-                          : '未知位置';
+                          ? timeData.get(location.id)?.time || 'Time data unavailable'
+                          : 'Unknown location';
                         
                         return (
                           <Draggable
@@ -321,15 +366,16 @@ export default function MeetingPlanner({
               <Separator />
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-medium">会议总结</h3>
+                  <h3 className="text-lg font-medium">Meeting Summary</h3>
                   <p className="text-sm text-muted-foreground">
-                    {meetingTitle || "未命名会议"} 将于 {dateString} {selectedTime} 开始，
-                    持续 {meetingDuration} 分钟。共有 {participants.length} 位参与者，来自不同时区。
+                    {meetingTitle || "Untitled Meeting"} will start on {dateString} at {selectedTime},
+                    lasting for {meetingDuration} minute{meetingDuration !== '1' ? 's' : ''}. 
+                    There {participants.length === 1 ? 'is' : 'are'} {participants.length} participant{participants.length !== 1 ? 's' : ''} from different time zones.
                   </p>
                 </div>
 
                 <Button className="w-full" onClick={generateMeetingLink}>
-                  生成会议邀请链接
+                  Generate Meeting Invitation Link
                 </Button>
               </div>
             </>

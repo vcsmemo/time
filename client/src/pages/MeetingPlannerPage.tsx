@@ -5,8 +5,10 @@ import { Container } from '@/components/ui/container';
 import TimeNavigation from '../components/TimeNavigation';
 import MeetingPlanner from '../components/MeetingPlanner';
 import { useTheme } from '../lib/ThemeContext';
-import { Location, defaultLocations } from '../lib/locations';
+import { Location, defaultLocations, searchLocation } from '../lib/locations';
 import { TimeData, convertTimeToAllLocations } from '../lib/time';
+import { parseDateTimeFromInputs } from '../lib/utils';
+import { useLocation } from 'wouter';
 
 export default function MeetingPlannerPage() {
   const { isDarkMode } = useTheme();
@@ -14,6 +16,66 @@ export default function MeetingPlannerPage() {
   const [useRealTime, setUseRealTime] = useState(true);
   const [locations, setLocations] = useState<Location[]>(defaultLocations);
   const [timeData, setTimeData] = useState<Map<string, TimeData>>(new Map());
+  const [location] = useLocation();
+  const [participants, setParticipants] = useState<Array<{ locationId: string; name: string }>>([]);
+  const [meetingTitle, setMeetingTitle] = useState<string>('');
+  const [meetingDuration, setMeetingDuration] = useState<string>('60');
+  const [meetingLoaded, setMeetingLoaded] = useState<boolean>(false);
+
+  // Process URL parameters to load meeting data if available
+  useEffect(() => {
+    // Only run this once to avoid infinite loops
+    if (meetingLoaded) return;
+    
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const meetingData = params.get('meeting');
+      
+      if (meetingData) {
+        const meeting = JSON.parse(decodeURIComponent(meetingData));
+        
+        // Set meeting title and duration
+        if (meeting.title) setMeetingTitle(meeting.title);
+        if (meeting.duration) setMeetingDuration(meeting.duration);
+        
+        // Set meeting date and time
+        if (meeting.date && meeting.time) {
+          const dateTime = parseDateTimeFromInputs(meeting.date, meeting.time);
+          setSelectedDateTime(dateTime);
+          setUseRealTime(false);
+        }
+        
+        // Load participants if available
+        if (meeting.participants && Array.isArray(meeting.participants)) {
+          const loadedParticipants: Array<{ locationId: string; name: string }> = [];
+          
+          // Process each participant
+          meeting.participants.forEach((p: any) => {
+            if (p.name && p.location) {
+              // Find the location in our database
+              const locationName = p.location.split(',')[0].trim();
+              const matchingLocations = searchLocation(locationName);
+              
+              if (matchingLocations.length > 0) {
+                loadedParticipants.push({
+                  name: p.name,
+                  locationId: matchingLocations[0].id
+                });
+              }
+            }
+          });
+          
+          if (loadedParticipants.length > 0) {
+            setParticipants(loadedParticipants);
+          }
+        }
+        
+        setMeetingLoaded(true);
+      }
+    } catch (error) {
+      console.error('Error parsing meeting data:', error);
+    }
+  }, [location, meetingLoaded]);
 
   // Update time data when locations or selected time changes
   useEffect(() => {
@@ -52,16 +114,16 @@ export default function MeetingPlannerPage() {
   return (
     <>
       <Helmet>
-        <title>会议安排工具 | 全球时区转换器</title>
-        <meta name="description" content="为不同时区的参与者安排会议，查看各地参与者的当地时间" />
+        <title>Meeting Planner | Global Time Converter</title>
+        <meta name="description" content="Schedule meetings for participants in different time zones and view local times for all attendees" />
       </Helmet>
 
       <Container>
         <div className="py-6 space-y-6">
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold">会议安排工具</h1>
+            <h1 className="text-3xl font-bold">Meeting Planner</h1>
             <p className="text-muted-foreground">
-              为跨时区的参与者安排会议，查看每个参与者的当地时间，确保会议时间对所有人都合适。
+              Schedule meetings for participants across different time zones, view each attendee's local time, and ensure the meeting time works for everyone.
             </p>
 
             <TimeNavigation
@@ -77,6 +139,9 @@ export default function MeetingPlannerPage() {
                 timeData={timeData}
                 selectedDateTime={selectedDateTime}
                 onDateTimeChange={handleDateTimeChange}
+                initialParticipants={participants}
+                initialMeetingTitle={meetingTitle}
+                initialMeetingDuration={meetingDuration}
               />
             </DragDropContext>
           </div>
