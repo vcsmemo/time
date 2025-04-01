@@ -8,7 +8,6 @@ import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 import { Location } from '../lib/locations';
 import { TimeData, getTimeData } from '../lib/time';
-import { Calendar } from './ui/calendar';
 import {
   Select,
   SelectContent,
@@ -20,7 +19,6 @@ import {
 import { Badge } from './ui/badge';
 import { 
   Clock, 
-  Calendar as CalendarIcon, 
   Plus, 
   X, 
   ArrowDownUp,
@@ -28,7 +26,9 @@ import {
   MapPin,
   ChevronRight,
   Star,
-  Check
+  Check,
+  Info as InfoIcon,
+  Calendar
 } from 'lucide-react';
 import { formatDateForInput, formatTimeForInput, parseDateTimeFromInputs } from '../lib/utils';
 
@@ -56,7 +56,7 @@ export default function MeetingPlanner({
   const [selectedDate, setSelectedDate] = useState<Date>(selectedDateTime);
   const [selectedTime, setSelectedTime] = useState(formatTimeForInput(selectedDateTime));
   const [participants, setParticipants] = useState<Array<{ locationId: string; name: string }>>(initialParticipants);
-  const [showCalendar, setShowCalendar] = useState(false);
+  // 移除了showCalendar状态
   const [newParticipantName, setNewParticipantName] = useState('');
   const [newParticipantLocation, setNewParticipantLocation] = useState('');
   const [showAnimatedCard, setShowAnimatedCard] = useState(false);
@@ -98,18 +98,14 @@ export default function MeetingPlanner({
     setParticipants(newParticipants);
   };
 
-  // Handle date selection from calendar
-  const handleDateSelect = (date: Date | undefined) => {
-    if (date) {
-      setSelectedDate(date);
-      setShowCalendar(false);
+  // Handle date selection
+  const handleDateChange = (dateStr: string) => {
+    if (dateStr) {
+      const newDate = new Date(dateStr + 'T' + selectedTime);
+      setSelectedDate(newDate);
       
       // Update the global selected time
-      const newDateTime = parseDateTimeFromInputs(
-        formatDateForInput(date),
-        selectedTime
-      );
-      onDateTimeChange(newDateTime);
+      onDateTimeChange(newDate);
     }
   };
 
@@ -340,7 +336,7 @@ export default function MeetingPlanner({
                       animate={{ scale: 1, transition: { delay: 0.6, type: "spring" } }}
                       className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4"
                     >
-                      <CalendarIcon className="w-6 h-6 text-white" />
+                      <Calendar className="w-6 h-6 text-white" />
                     </motion.div>
                     <div>
                       <h4 className="text-xl font-bold mb-1">{animatedCardData.title}</h4>
@@ -467,58 +463,31 @@ export default function MeetingPlanner({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="meeting-date" className="text-sm font-medium">Date & Time</Label>
-              <div className="relative">
-                <div className="flex">
-                  <Input
-                    id="meeting-date"
-                    type="text"
-                    value={dateString}
-                    readOnly
-                    onClick={() => setShowCalendar(!showCalendar)}
-                    className="pr-10 border-primary/20 focus:border-primary/50"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setShowCalendar(!showCalendar)}
-                    className="ml-2 border-primary/20"
-                  >
-                    <CalendarIcon className="h-4 w-4" />
-                  </Button>
-                  <Input
-                    id="meeting-time"
-                    type="time"
-                    value={selectedTime}
-                    onChange={handleTimeChange}
-                    className="ml-2 border-primary/20 focus:border-primary/50"
-                  />
-                </div>
-                {showCalendar && (
-                  <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 border-2 border-primary/20 rounded-xl shadow-2xl" style={{ backgroundColor: 'white' }}>
-                    <div className="p-2 bg-gradient-to-r from-primary/10 to-primary/5 border-b border-primary/10 flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-700">Select Date</span>
-                      <button 
-                        onClick={() => setShowCalendar(false)}
-                        className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    </div>
-                    <div className="p-3 bg-white dark:bg-gray-800">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={(date) => {
-                          handleDateSelect(date);
-                          setShowCalendar(false);
-                        }}
-                        initialFocus
-                        className="bg-white dark:bg-gray-800"
-                      />
-                    </div>
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <div className="w-full">
+                    <Input
+                      id="meeting-date"
+                      type="date"
+                      value={formatDateForInput(selectedDate)}
+                      onChange={(e) => handleDateChange(e.target.value)}
+                      className="border-primary/20 focus:border-primary/50"
+                    />
                   </div>
-                )}
+                  <div className="w-full">
+                    <Input
+                      id="meeting-time"
+                      type="time"
+                      value={selectedTime}
+                      onChange={handleTimeChange}
+                      className="border-primary/20 focus:border-primary/50"
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center text-xs text-gray-500">
+                  <Clock className="h-3 w-3 mr-1" />
+                  <span>Select both a date and time for your meeting</span>
+                </div>
               </div>
             </div>
 
