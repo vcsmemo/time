@@ -37,9 +37,19 @@ interface MeetingPlannerProps {
   timeData: Map<string, TimeData>;
   selectedDateTime: Date;
   onDateTimeChange: (date: Date) => void;
-  initialParticipants?: Array<{ locationId: string; name: string }>;
+  initialParticipants?: Array<{ id: string; locationId: string; name: string }>;
   initialMeetingTitle?: string;
   initialMeetingDuration?: string;
+  meetingId?: string;
+  isCreator?: boolean;
+  privacySettings?: {
+    hideParticipantNames: boolean;
+    hideParticipantLocations: boolean;
+  };
+  onPrivacySettingsChange?: (hideNames: boolean, hideLocations: boolean) => void;
+  isConnected?: boolean;
+  wsError?: string | null;
+  onMeetingUpdate?: (meeting: any) => void;
 }
 
 export default function MeetingPlanner({
@@ -50,13 +60,29 @@ export default function MeetingPlanner({
   initialParticipants = [],
   initialMeetingTitle = '',
   initialMeetingDuration = '60',
+  meetingId,
+  isCreator = false,
+  privacySettings = {
+    hideParticipantNames: false,
+    hideParticipantLocations: false
+  },
+  onPrivacySettingsChange,
+  isConnected,
+  wsError,
+  onMeetingUpdate
 }: MeetingPlannerProps) {
   const [meetingTitle, setMeetingTitle] = useState(initialMeetingTitle);
   const [meetingDuration, setMeetingDuration] = useState(initialMeetingDuration);
   const [selectedDate, setSelectedDate] = useState<Date>(selectedDateTime);
   const [selectedTime, setSelectedTime] = useState(formatTimeForInput(selectedDateTime));
-  const [participants, setParticipants] = useState<Array<{ locationId: string; name: string }>>(initialParticipants);
-  // 移除了showCalendar状态
+  const [participants, setParticipants] = useState<Array<{ id: string; locationId: string; name: string }>>(
+    // 处理参与者数据，确保每个参与者都有唯一ID
+    initialParticipants.map(participant => ({
+      id: participant.id || Math.random().toString(36).substring(2, 10),
+      locationId: participant.locationId,
+      name: participant.name
+    }))
+  );
   const [newParticipantName, setNewParticipantName] = useState('');
   const [newParticipantLocation, setNewParticipantLocation] = useState('');
   const [showAnimatedCard, setShowAnimatedCard] = useState(false);
@@ -79,16 +105,48 @@ export default function MeetingPlanner({
   // Handle adding a new participant
   const handleAddParticipant = () => {
     if (newParticipantName.trim() && newParticipantLocation) {
-      setParticipants([
-        ...participants,
-        {
-          locationId: newParticipantLocation,
-          name: newParticipantName.trim(),
-        },
-      ]);
+      const newParticipant = {
+        id: Math.random().toString(36).substring(2, 10),
+        locationId: newParticipantLocation,
+        name: newParticipantName.trim(),
+      };
+      
+      setParticipants([...participants, newParticipant]);
       setNewParticipantName('');
       setNewParticipantLocation('');
+      
+      // 如果启用了WebSocket，同步更新到服务器
+      if (onMeetingUpdate && meetingId) {
+        updateMeetingData();
+      }
     }
+  };
+  
+  // 将当前会议数据发送到服务器
+  const updateMeetingData = () => {
+    if (!onMeetingUpdate || !meetingId) return;
+    
+    const updatedMeeting = {
+      id: meetingId,
+      title: meetingTitle,
+      date: dateString,
+      time: selectedTime,
+      duration: meetingDuration,
+      privacySettings,
+      participants: participants.map(p => {
+        const location = getLocationById(p.locationId);
+        const localTime = location ? timeData.get(location.id)?.time || 'Unknown time' : 'Unknown time';
+        return {
+          id: p.id,
+          name: p.name,
+          location: location ? `${location.name}, ${location.country}` : 'Unknown location',
+          timezone: location?.timezone || 'Unknown timezone',
+          localTime
+        };
+      })
+    };
+    
+    onMeetingUpdate(updatedMeeting);
   };
 
   // Handle removing a participant
@@ -96,6 +154,11 @@ export default function MeetingPlanner({
     const newParticipants = [...participants];
     newParticipants.splice(index, 1);
     setParticipants(newParticipants);
+    
+    // 如果启用了WebSocket，同步更新到服务器
+    if (onMeetingUpdate && meetingId) {
+      updateMeetingData();
+    }
   };
 
   // Handle date selection
@@ -106,6 +169,12 @@ export default function MeetingPlanner({
       
       // Update the global selected time
       onDateTimeChange(newDate);
+      
+      // 如果启用了WebSocket，同步更新到服务器
+      if (onMeetingUpdate && meetingId) {
+        // 延迟更新，等状态更新后再同步
+        setTimeout(() => updateMeetingData(), 0);
+      }
     }
   };
 
@@ -116,6 +185,12 @@ export default function MeetingPlanner({
     // Update the global selected time
     const newDateTime = parseDateTimeFromInputs(dateString, e.target.value);
     onDateTimeChange(newDateTime);
+    
+    // 如果启用了WebSocket，同步更新到服务器
+    if (onMeetingUpdate && meetingId) {
+      // 延迟更新，等状态更新后再同步
+      setTimeout(() => updateMeetingData(), 0);
+    }
   };
 
   // Handle drag end for reordering participants
@@ -127,6 +202,11 @@ export default function MeetingPlanner({
     items.splice(result.destination.index, 0, reorderedItem);
     
     setParticipants(items);
+    
+    // 如果启用了WebSocket，同步更新到服务器
+    if (onMeetingUpdate && meetingId) {
+      setTimeout(() => updateMeetingData(), 0);
+    }
   };
 
   // Get location by ID
@@ -455,7 +535,12 @@ export default function MeetingPlanner({
               id="meeting-title"
               placeholder="Enter meeting title"
               value={meetingTitle}
-              onChange={(e) => setMeetingTitle(e.target.value)}
+              onChange={(e) => {
+                setMeetingTitle(e.target.value);
+                if (onMeetingUpdate && meetingId) {
+                  setTimeout(() => updateMeetingData(), 0);
+                }
+              }}
               className="border-primary/20 focus:border-primary/50"
             />
           </div>
@@ -493,7 +578,14 @@ export default function MeetingPlanner({
 
             <div className="space-y-2">
               <Label htmlFor="meeting-duration" className="text-sm font-medium">Duration</Label>
-              <Select value={meetingDuration} onValueChange={setMeetingDuration}>
+              <Select 
+                value={meetingDuration} 
+                onValueChange={(value) => {
+                  setMeetingDuration(value);
+                  if (onMeetingUpdate && meetingId) {
+                    setTimeout(() => updateMeetingData(), 0);
+                  }
+                }}>
                 <SelectTrigger className="border-primary/20 focus:border-primary/50">
                   <SelectValue placeholder="Duration" />
                 </SelectTrigger>
