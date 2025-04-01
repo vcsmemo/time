@@ -12,6 +12,7 @@ import CountriesPage from "@/pages/CountriesPage";
 import CountryPage from "@/pages/CountryPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogArticlePage from "@/pages/BlogArticlePage";
+import MeetingPlannerPage from "@/pages/MeetingPlannerPage";
 import { ThemeProvider } from "./lib/ThemeContext";
 
 function Router() {
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/country/:country" component={CountryPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:articleId" component={BlogArticlePage} />
+      <Route path="/meeting-planner" component={MeetingPlannerPage} />
       <Route component={NotFound} />
     </Switch>
   );
