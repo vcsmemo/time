@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="240" fill="#4f46e5" opacity="0.9"/>
+  <circle cx="256" cy="256" r="230" stroke="white" stroke-width="8" fill="none"/>
+  <circle cx="256" cy="256" r="10" fill="white"/>
+  
+  <!-- Hour Marks -->
+  <line x1="256" y1="50" x2="256" y2="80" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="359" y1="86" x2="342" y2="110" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="430" y1="160" x2="405" y2="180" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="462" y1="256" x2="430" y2="256" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="430" y1="359" x2="405" y2="342" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="359" y1="430" x2="342" y2="405" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="256" y1="462" x2="256" y2="430" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="152" y1="430" x2="168" y2="405" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="86" y1="359" x2="110" y2="342" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="50" y1="256" x2="82" y2="256" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="82" y1="152" x2="110" y2="168" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <line x1="152" y1="82" x2="168" y2="110" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Clock Hands -->
+  <line x1="256" y1="256" x2="256" y2="120" stroke="white" stroke-width="12" stroke-linecap="round"/>
+  <line x1="256" y1="256" x2="360" y2="256" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Globe Element -->
+  <path d="M256 70C256 70 190 140 190 256C190 372 256 442 256 442" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M256 70C256 70 322 140 322 256C322 372 256 442 256 442" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M110 256H402" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M132 180H380" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M132 332H380" stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+</svg>
