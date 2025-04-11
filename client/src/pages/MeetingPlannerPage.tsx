@@ -161,12 +161,13 @@ export default function MeetingPlannerPage() {
     // 更新参与者列表，保持本地状态与服务器同步
     if (meetingData.participants && Array.isArray(meetingData.participants)) {
       const syncedParticipants = meetingData.participants.map(p => {
-        // 如果已有locationId，直接使用
-        if (p.locationId) {
+        // 使用类型断言处理可能的locationId
+        const pAny = p as any;
+        if (pAny.locationId) {
           return {
             id: p.id,
             name: p.name,
-            locationId: p.locationId
+            locationId: pAny.locationId
           };
         } 
         // 否则尝试从location字符串中查找位置
