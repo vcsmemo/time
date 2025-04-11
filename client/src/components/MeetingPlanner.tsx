@@ -246,16 +246,22 @@ export default function MeetingPlanner({
     
     // Create a regular meeting data object for website sharing
     const meetingData = {
-      id: Math.random().toString(36).substring(2, 10),
+      id: meetingId || Math.random().toString(36).substring(2, 10),
       title: title,
       date: dateString,
       time: selectedTime,
       duration: meetingDuration,
+      privacySettings: privacySettings || {
+        hideParticipantNames: false,
+        hideParticipantLocations: false
+      },
       participants: participants.map(p => {
         const location = getLocationById(p.locationId);
         const localTime = location ? timeData.get(location.id)?.time || 'Unknown time' : 'Unknown time';
         return {
+          id: p.id,
           name: p.name,
+          locationId: p.locationId,
           location: location ? `${location.name}, ${location.country}` : 'Unknown location',
           timezone: location?.timezone || 'Unknown timezone',
           localTime

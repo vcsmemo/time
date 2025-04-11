@@ -18,6 +18,7 @@ interface MeetingData {
   participants: Array<{
     id: string;
     name: string;
+    locationId?: string; // 添加locationId字段
     location: string;
     timezone: string;
     localTime: string;

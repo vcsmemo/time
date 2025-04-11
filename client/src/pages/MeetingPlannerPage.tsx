@@ -88,7 +88,16 @@ export default function MeetingPlannerPage() {
           
           // 处理每个参与者
           meeting.participants.forEach((p: any) => {
-            if (p.name && p.location) {
+            // 如果参与者已有locationId，直接使用
+            if (p.locationId) {
+              loadedParticipants.push({
+                id: p.id || nanoid(8),
+                name: p.name,
+                locationId: p.locationId
+              });
+            }
+            // 否则根据location信息查找位置
+            else if (p.name && p.location) {
               // 在数据库中查找位置
               const locationName = p.location.split(',')[0].trim();
               const matchingLocations = searchLocation(locationName);
@@ -151,11 +160,24 @@ export default function MeetingPlannerPage() {
     
     // 更新参与者列表，保持本地状态与服务器同步
     if (meetingData.participants && Array.isArray(meetingData.participants)) {
-      const syncedParticipants = meetingData.participants.map(p => ({
-        id: p.id,
-        name: p.name,
-        locationId: defaultLocations.find(loc => loc.name === p.location.split(',')[0].trim())?.id || ''
-      })).filter(p => p.locationId); // 过滤掉无效的位置
+      const syncedParticipants = meetingData.participants.map(p => {
+        // 如果已有locationId，直接使用
+        if (p.locationId) {
+          return {
+            id: p.id,
+            name: p.name,
+            locationId: p.locationId
+          };
+        } 
+        // 否则尝试从location字符串中查找位置
+        else {
+          return {
+            id: p.id,
+            name: p.name,
+            locationId: defaultLocations.find(loc => loc.name === p.location?.split(',')[0]?.trim())?.id || ''
+          };
+        }
+      }).filter(p => p.locationId); // 过滤掉无效的位置
       
       setParticipants(syncedParticipants);
     }
