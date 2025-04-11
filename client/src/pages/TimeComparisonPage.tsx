@@ -19,8 +19,9 @@ export default function TimeComparisonPage() {
   const [timeData, setTimeData] = useState<Map<string, TimeData>>(new Map<string, TimeData>());
   
   // SEO metadata
-  const pageTitle = "Time Zone Comparison Tool - World Clock";
-  const pageDescription = "Compare time differences across multiple locations worldwide. Useful for international business, travel planning, and global coordination.";
+  const pageTitle = "Time Zone Comparison Tool | World Clock for Global Teams";
+  const pageDescription = "Compare time differences across multiple locations with our visual time zone comparison tool. Perfect for international business, remote teams, and global coordination.";
+  const pageKeywords = "time zone comparison, world clock comparison, global time difference, international time calculator, business time zones, time zone difference calculator, world time chart";
   
   // Real-time updates
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function TimeComparisonPage() {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
-        <meta name="keywords" content="time zones, time comparison, world clock, global time, international time" />
+        <meta name="keywords" content={pageKeywords} />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -98,6 +99,28 @@ export default function TimeComparisonPage() {
         
         {/* Canonical URL */}
         <link rel="canonical" href={window.location.href} />
+        
+        {/* Schema.org structured data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": pageTitle,
+            "description": pageDescription,
+            "applicationCategory": "UtilityApplication",
+            "operatingSystem": "Web",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "abstract": "Tool for comparing time differences across multiple global locations simultaneously.",
+            "audience": {
+              "@type": "Audience",
+              "audienceType": ["Business Travelers", "Remote Teams", "International Business"]
+            }
+          })}
+        </script>
       </Helmet>
       
       <Header 

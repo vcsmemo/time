@@ -229,8 +229,40 @@ export default function MeetingPlannerPage() {
   return (
     <>
       <Helmet>
-        <title>Meeting Planner | Global Time Converter</title>
-        <meta name="description" content="Schedule meetings for participants in different time zones and view local times for all attendees" />
+        <title>International Meeting Planner | Cross Time Zone Scheduler</title>
+        <meta name="description" content="Plan international meetings across multiple time zones with our collaborative meeting scheduler. Send calendar invites that show local times for all participants." />
+        <meta name="keywords" content="meeting planner, international meeting scheduler, time zone meeting tool, global meeting planner, cross time zone scheduler, world time meeting" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="International Meeting Planner | Cross Time Zone Scheduler" />
+        <meta property="og:description" content="Plan international meetings across multiple time zones with our collaborative meeting scheduler." />
+        <meta property="og:site_name" content="World Time Zones" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="International Meeting Planner | Cross Time Zone Scheduler" />
+        <meta name="twitter:description" content="Plan international meetings across multiple time zones with our collaborative meeting scheduler." />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href={window.location.href.split('?')[0]} />
+        
+        {/* Structured data for Meeting Planning Tool */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "International Meeting Planner",
+            "description": "Plan international meetings across multiple time zones with our collaborative meeting scheduler.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          })}
+        </script>
       </Helmet>
 
       <Container>
