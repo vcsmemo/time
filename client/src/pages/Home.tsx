@@ -25,8 +25,9 @@ export default function Home() {
   const [timeData, setTimeData] = useState<Map<string, TimeData>>(new Map<string, TimeData>());
   
   // App title and description
-  const appTitle = "World Clock - Global Time Zone Converter";
-  const appDescription = "Compare time across multiple global cities with our intuitive world clock and time zone converter. Find local times, schedule meetings, and plan international calls easily.";
+  const appTitle = "World Clock & Time Zone Converter | Plan International Meetings";
+  const appDescription = "Compare time across multiple global cities with our intuitive world clock and time zone converter. Find local times, schedule international meetings, and calculate time differences worldwide.";
+  const appKeywords = "world clock, time zones, time zone converter, international meeting planner, global time, international time, time difference calculator, world time, multi timezone, schedule meetings across time zones";
   
   // Initialize with default locations
   useEffect(() => {
@@ -160,7 +161,7 @@ export default function Home() {
         <Helmet>
           <title>{appTitle}</title>
           <meta name="description" content={appDescription} />
-          <meta name="keywords" content="world clock, time zones, time converter, global time, international time, time difference calculator" />
+          <meta name="keywords" content={appKeywords} />
           
           {/* Open Graph / Facebook */}
           <meta property="og:type" content="website" />
