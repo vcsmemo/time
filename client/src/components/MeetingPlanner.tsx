@@ -139,6 +139,7 @@ export default function MeetingPlanner({
         return {
           id: p.id,
           name: p.name,
+          locationId: p.locationId,  // 确保包含locationId
           location: location ? `${location.name}, ${location.country}` : 'Unknown location',
           timezone: location?.timezone || 'Unknown timezone',
           localTime
@@ -272,13 +273,23 @@ export default function MeetingPlanner({
     // Encode the meeting data to share in the URL
     const encodedData = encodeURIComponent(JSON.stringify(meetingData));
     
-    // Build a query string to append to the URL
-    const queryString = new URLSearchParams({
-      meeting: encodedData
-    }).toString();
+    // 创建查询参数
+    let queryParams;
     
-    // Create the full website link
-    const websiteLink = `${window.location.origin}/meeting-planner?${queryString}`;
+    // 如果有会议ID，优先使用ID作为共享方式（更为简洁）
+    if (meetingId) {
+      queryParams = new URLSearchParams({
+        id: meetingId
+      }).toString();
+    } else {
+      // 否则使用完整会议数据
+      queryParams = new URLSearchParams({
+        meeting: encodedData
+      }).toString();
+    }
+    
+    // 创建完整网站链接
+    const websiteLink = `${window.location.origin}/meeting-planner?${queryParams}`;
     
     // Create Google Calendar URL (this works better than mailto for calendar invites)
     const googleStart = formatDateForGoogle(startDate);
@@ -595,7 +606,7 @@ export default function MeetingPlanner({
                 <SelectTrigger className="border-primary/20 focus:border-primary/50">
                   <SelectValue placeholder="Duration" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="z-50">
                   <SelectGroup>
                     <SelectItem value="30">30 minutes</SelectItem>
                     <SelectItem value="60">1 hour</SelectItem>
@@ -635,7 +646,7 @@ export default function MeetingPlanner({
                 <SelectTrigger className="flex-1 border-primary/20 focus:border-primary/50">
                   <SelectValue placeholder="Select location" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="z-50">
                   <SelectGroup>
                     {locations.map((location) => (
                       <SelectItem key={location.id} value={location.id}>
