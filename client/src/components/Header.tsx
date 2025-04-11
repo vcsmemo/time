@@ -32,7 +32,7 @@ export default function Header({ onToggleTheme, isDarkMode, onToggleSettings }: 
           <Link href="/">
             <div className="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
               <Globe className="h-6 w-6" />
-              <h1 className="text-xl font-semibold">Global Time Viewer</h1>
+              <h1 className="text-xl font-semibold">WorldClockNow</h1>
             </div>
           </Link>
         </div>
