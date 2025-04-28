@@ -1688,3 +1688,31 @@ export const allTimezones = [
   "Pacific/Palau", "Pacific/Pitcairn", "Pacific/Pohnpei", "Pacific/Port_Moresby", "Pacific/Rarotonga", "Pacific/Tahiti",
   "Pacific/Tarawa", "Pacific/Tongatapu", "Pacific/Wake", "Pacific/Wallis"
 ];
+
+// Get location based on user's timezone
+export function getLocationByClientTimezone(): Location | null {
+  try {
+    // Get user's browser timezone
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    // Look for exact timezone match
+    const exactMatch = defaultLocations.find(loc => loc.timezone === userTimezone);
+    if (exactMatch) {
+      return exactMatch;
+    }
+    
+    // If no exact match, look for region match
+    // For example, if user is in 'America/Chicago', match any location with 'America/' prefix
+    const regionPrefix = userTimezone.split('/')[0];
+    const regionMatch = defaultLocations.find(loc => loc.timezone.startsWith(`${regionPrefix}/`));
+    if (regionMatch) {
+      return regionMatch;
+    }
+    
+    // If no match found, return default location (New York)
+    return defaultLocations.find(loc => loc.id === 'newyork') || defaultLocations[0];
+  } catch (error) {
+    console.error("Unable to get location based on timezone:", error);
+    return defaultLocations.find(loc => loc.id === 'newyork') || defaultLocations[0];
+  }
+}

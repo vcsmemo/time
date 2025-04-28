@@ -7,7 +7,7 @@ import TimeNavigation from "@/components/TimeNavigation";
 import LocationList from "@/components/LocationList";
 import TimeComparison from "@/components/TimeComparison";
 import AddLocationDialog from "@/components/AddLocationDialog";
-import { Location, defaultLocations } from "@/lib/locations";
+import { Location, defaultLocations, getLocationByClientTimezone } from "@/lib/locations";
 import { TimeData, convertTimeToAllLocations } from "@/lib/time";
 import { timezoneToUrlFormat } from "@/lib/utils";
 import { Clock, CalendarClock, Globe, Flag, BookOpen, MapPin, Layers, ArrowRight, Zap, Clock3, BarChart3, Cpu } from "lucide-react";
@@ -33,10 +33,28 @@ export default function Home() {
   useEffect(() => {
     // Start with a few default locations
     const initialLocations = defaultLocations.slice(0, 5);
-    setLocations(initialLocations);
     
-    // Set New York as the default selected location
-    setSelectedLocationId(initialLocations[1].id);
+    // Get user's location based on their timezone
+    const userLocation = getLocationByClientTimezone();
+    
+    // If we found a location based on user's timezone that's not in the initial set,
+    // add it to the list (replacing the last item to keep 5 total)
+    if (userLocation && !initialLocations.some(loc => loc.id === userLocation.id)) {
+      const locationsWithUserLocation = [...initialLocations.slice(0, 4), userLocation];
+      setLocations(locationsWithUserLocation);
+      
+      // Set user's location as the selected one
+      setSelectedLocationId(userLocation.id);
+    } else {
+      setLocations(initialLocations);
+      
+      // If user location is in the set, select it, otherwise use default (New York)
+      if (userLocation && initialLocations.some(loc => loc.id === userLocation.id)) {
+        setSelectedLocationId(userLocation.id);
+      } else {
+        setSelectedLocationId(initialLocations[1].id); // Default to New York
+      }
+    }
   }, []);
   
   // 实时更新时间：每秒更新一次当前时间
