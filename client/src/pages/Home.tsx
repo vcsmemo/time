@@ -72,7 +72,7 @@ export default function Home() {
     if (selectedLocation) {
       const locationTime = timeData.get(selectedLocationId);
       if (locationTime) {
-        document.title = `${locationTime.time} - ${selectedLocation.name} | World Clock`;
+        document.title = `WorldClockNow | Global Time Zone Converter`;
       }
     }
   }, [selectedLocationId, timeData, locations]);

@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:justify-between md:items-center">
           <div className="mb-4 md:mb-0">
             <h3 className="text-lg font-semibold flex items-center">
-              <Globe className="h-5 w-5 mr-2" /> Global Time Viewer
+              <Globe className="h-5 w-5 mr-2" /> WorldClockNow
             </h3>
             <p className="text-neutral-300 text-sm mt-1">Track time across the world with precision</p>
           </div>
@@ -19,7 +19,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-neutral-700 mt-4 pt-4 text-sm text-neutral-400">
-          © 2023 Global Time Viewer. All rights reserved.
+          © 2025 WorldClockNow. All rights reserved.
         </div>
       </div>
     </footer>
